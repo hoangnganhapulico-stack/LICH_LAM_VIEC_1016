@@ -115,6 +115,36 @@
   .phone-pop a:hover{background:var(--panel);}
   .empty{padding:30px;text-align:center;color:var(--ink-soft);font-size:13px;}
 
+
+  /* ---- SM + Push sale target ---- */
+  .sm-box{margin-bottom:16px;}
+  .sm-box:empty{display:none;}
+  .push-box{margin-bottom:16px;}
+  .push-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+  .push-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:16px 18px 12px;background:linear-gradient(135deg,#FCE7D6 0%,var(--panel) 60%);}
+  .push-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;letter-spacing:.03em;text-transform:uppercase;color:var(--steel);}
+  .push-sub{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+  .push-daytype{font-size:12px;font-weight:700;border-radius:999px;padding:5px 12px;background:var(--off-soft);color:var(--ink-soft);white-space:nowrap;}
+  .push-daytype.dt1{background:var(--admin-soft);color:var(--admin);}
+  .push-daytype.dt2{background:var(--leave-soft);color:var(--leave);}
+  .push-daytype.dt3{background:var(--safety);color:#fff;}
+  .push-table-wrap{overflow-x:auto;padding:0 18px 14px;}
+  .push-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px;}
+  .push-table th{text-align:center;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap;}
+  .push-table th:first-child,.push-table th:nth-child(2){text-align:left;}
+  .push-table th .u{display:block;font-weight:500;text-transform:none;letter-spacing:0;font-size:10.5px;}
+  .push-table td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  .push-table tr.active td{background:var(--active-soft);}
+  .push-table .n-cell{min-width:150px;}
+  .push-table .t-cell{font-size:12px;font-weight:600;color:var(--ink-soft);white-space:nowrap;}
+  .push-table .q-cell{text-align:center;min-width:92px;}
+  .q-val{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;color:var(--steel);line-height:1.1;}
+  .q-hint{font-size:10.5px;color:var(--ink-soft);margin-top:2px;}
+  .q-none{color:var(--off);}
+  .push-table tfoot td{border-bottom:none;background:var(--panel2);}
+  .push-table .foot-lbl{font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);}
+  .push-empty{padding:22px 18px;font-size:13px;color:var(--ink-soft);}
+
   .panel-title{display:flex;align-items:center;justify-content:space-between;margin:26px 0 12px;}
   .panel-title h2{font-size:19px;color:var(--ink);}
   .panel-title .actions{display:flex;gap:8px;}
@@ -211,6 +241,9 @@
       <div class="legend-chip"><span class="tag">4h</span> = ca dưới 8 tiếng</div>
     </div>
 
+    <div id="smBox" class="sm-box"></div>
+    <div id="pushBox" class="push-box"></div>
+
     <div class="teams" id="teamsBox"></div>
   </div>
 
@@ -291,8 +324,13 @@ const BUCKET_META = {
   day:{color:"var(--ok)",soft:"var(--ok-soft)",icon:"☀️",name:"Ca sáng"},
   evening:{color:"var(--safety)",soft:"var(--safety-soft)",icon:"🌇",name:"Ca chiều/tối"},
 };
-function teamOf(position){
-  return /sale/i.test(position||"") ? "SALES" : "ADMIN";
+// Quản lý cửa hàng (SM) - không thuộc Team Admin hay Team Sale. Nhận diện theo chức danh, hoặc theo tên.
+const SM_NAMES = ["nguyen hoang dung"];
+function teamOf(position, name){
+  const p = String(position||"").trim();
+  if(/^(sm|store manager)\b/i.test(p)) return "SM";
+  if(name && SM_NAMES.includes(normName(name))) return "SM";
+  return /sale/i.test(p) ? "SALES" : "ADMIN";
 }
 function nowDecimalHours(){
   const d = new Date();
@@ -461,7 +499,7 @@ function parseWorkbook(workbook){
 /* ============================================================ State */
 /* Bump this whenever the parsing/date logic changes, so old cached results (parsed with a
    previous, possibly buggy, version of this code) are never silently reused. */
-const SCHEMA_VERSION = 6;
+const SCHEMA_VERSION = 7;
 
 let scheduleData = null; // {dates, sheetsUsed, sheetCount}
 let fileMeta = null;
@@ -595,6 +633,7 @@ function renderAll(){
     renderTargetStrip();
     renderNoteBanner();
     renderStats();
+    renderPush();
     renderTeams();
   }
   renderTaskAssigneeOptions();
@@ -694,8 +733,9 @@ function shiftBadgeHtml(c){
 
 function renderTeams(){
   const recs = dayRecords();
-  const admin = recs.filter(r=>teamOf(r.position)==="ADMIN");
-  const sale = recs.filter(r=>teamOf(r.position)==="SALES");
+  const sm = recs.filter(r=>teamOf(r.position, r.name)==="SM");
+  const admin = recs.filter(r=>teamOf(r.position, r.name)==="ADMIN");
+  const sale = recs.filter(r=>teamOf(r.position, r.name)==="SALES");
 
   const empRowHtml = (r, c, isOff) => {
     const active = !isOff && isShiftActiveNow(c);
@@ -751,7 +791,133 @@ function renderTeams(){
     </div>`;
   };
 
+  $("#smBox").innerHTML = sm.length ? buildTeamCard("Quản lý cửa hàng (SM)", sm) : "";
   $("#teamsBox").innerHTML = buildTeamCard("Team Admin", admin) + buildTeamCard("Team Sale", sale);
+}
+
+/* ============================================================ Target Push Sale - Team Admin */
+// Mỗi tháng chỉ cần thêm 1 khối theo mẫu bên dưới. d = [T2-T5, Thứ 6, T7-CN & lễ, Kohnan Day] (số/ca).
+// f = số/ca trực quầy (nhóm Cashier PT chỉ có 1 mức cho mọi ngày). m = target cả tháng.
+const PUSH_TARGETS = {
+  "2026-10": {
+    title: "Push Sale tháng 10/2026",
+    kohnanDays: ["10-05","10-20"],
+    products: [
+      {key:"sua", label:"Sữa tắm ON: The Body", short:"Sữa tắm", unit:"chai", icon:"🧴"},
+      {key:"kem", label:"Kem dưỡng tay", short:"Kem tay", unit:"tuýp", icon:"🤲"},
+      {key:"son", label:"Son dưỡng môi", short:"Son dưỡng", unit:"thỏi", icon:"💋"},
+    ],
+    people: [
+      {name:"Nguyễn Lê Minh Thư", role:"CS - FT",
+        sua:{m:150,d:[4.1,6.2,9.1,9.1]}, kem:{m:23,d:[0.6,1.0,1.4,1.4]}, son:{m:23,d:[0.6,1.0,1.4,1.4]}},
+      {name:"Lê Uyên Nhi", role:"SC - FT",
+        sua:{m:125,d:[3.5,5.2,7.6,7.6]}, kem:{m:18,d:[0.5,0.7,1.1,1.1]}, son:{m:18,d:[0.5,0.7,1.1,1.1]}},
+      {name:"Võ Đặng Tú Quyên", role:"Admin - FT",
+        sua:{m:100,d:[2.8,4.1,6.1,6.1]}, kem:{m:12,d:[0.3,0.5,0.7,0.7]}, son:{m:12,d:[0.3,0.5,0.7,0.7]}},
+      {name:"Tăng Quế Nhi", role:"Admin - FT",
+        sua:{m:85,d:[2.4,3.5,5.2,5.2]}, kem:{m:11,d:[0.3,0.5,0.7,0.7]}, son:{m:11,d:[0.3,0.5,0.7,0.7]}},
+      {name:"Phan Thị Chúc Linh", role:"Admin - FT",
+        sua:{m:85,d:[2.4,3.5,5.2,5.2]}, kem:{m:11,d:[0.3,0.5,0.7,0.7]}, son:{m:11,d:[0.3,0.5,0.7,0.7]}},
+      {name:"Nguyễn Ngọc Phụng", role:"Admin - FT (mới)",
+        sua:{m:80,d:[2.2,3.3,4.9,4.9]}, kem:{m:11,d:[0.3,0.5,0.7,0.7]}, son:{m:11,d:[0.3,0.5,0.7,0.7]}},
+      {name:"Dương Xuân Hoàng Ngân", role:"Admin Chief - FT",
+        sua:{m:50,d:[1.4,2.1,3.0,3.0]}, kem:{m:8,d:[0.2,0.3,0.5,0.5]}, son:{m:8,d:[0.2,0.3,0.5,0.5]}},
+      {name:"Phan Thị Thùy Dương", role:"Cashier - PT",
+        sua:{m:50,f:4.2}, kem:{m:8,f:0.7}, son:{m:8,f:0.7}},
+      {name:"Trình Quách Vy", role:"Cashier - PT",
+        sua:{m:35,f:2.9}, kem:{m:8,f:0.7}, son:{m:8,f:0.7}},
+      {name:"Võ Thanh Thảo", role:"Cashier - PT",
+        sua:{m:20,f:1.7}, kem:{m:5,f:0.4}, son:{m:5,f:0.4}},
+      {name:"Nguyễn Việt Hương Như", role:"Cafe Pet - FT (mới)",
+        sua:{m:20,d:[0.6,0.8,1.2,1.2]}, kem:{m:5,d:[0.1,0.2,0.3,0.3]}, son:{m:5,d:[0.1,0.2,0.3,0.3]}},
+    ],
+  },
+};
+const PUSH_DAY_LABELS = ["Ngày thường (T2-T5)","Thứ 6","Cuối tuần & lễ","Kohnan Day"];
+// Quy đổi "≈ 1 sản phẩm mỗi N ca" cho mức dưới 1/ca, theo bảng target gốc.
+const PUSH_HINT = {0.1:7, 0.2:5, 0.3:3, 0.4:2, 0.5:2, 0.6:2, 0.7:2};
+
+function normName(s){
+  return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/gi,"d").toLowerCase().replace(/\s+/g," ").trim();
+}
+function pushDayType(iso, cfg){
+  const d = new Date(iso+"T00:00:00");
+  const mmdd = `${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+  if(cfg.kohnanDays.includes(mmdd)) return 3;
+  const dow = d.getDay();
+  if(dow===0 || dow===6 || specialDayTags(iso).some(t=>t.cls==="holiday")) return 2;
+  if(dow===5) return 1;
+  return 0;
+}
+function pushQty(spec, dayType){
+  if(!spec) return null;
+  return typeof spec.f === "number" ? spec.f : spec.d[dayType];
+}
+function fmtQty(v){
+  return Number.isInteger(v) ? String(v) : v.toFixed(1);
+}
+
+function renderPush(){
+  const box = $("#pushBox");
+  if(!scheduleData || !selectedDate){ box.innerHTML = ""; return; }
+  const cfg = PUSH_TARGETS[selectedDate.slice(0,7)];
+  if(!cfg){
+    const d = new Date(selectedDate+"T00:00:00");
+    box.innerHTML = `<div class="push-card"><div class="push-empty">Chưa có bảng target push sale Team Admin cho tháng ${d.getMonth()+1}/${d.getFullYear()}.</div></div>`;
+    return;
+  }
+  const dayType = pushDayType(selectedDate, cfg);
+  const index = {};
+  cfg.people.forEach(p=>{ index[normName(p.name)] = p; });
+
+  const working = (scheduleData.dates[selectedDate]||[])
+    .filter(r=>teamOf(r.position, r.name)==="ADMIN")
+    .map(r=>({r, c:classifyShift(r.raw)}))
+    .filter(x=>x.c.kind==="shift")
+    .sort((a,b)=>a.c.startH-b.c.startH || (a.r.no||0)-(b.r.no||0));
+
+  const totals = cfg.products.map(()=>0);
+  const cell = (spec, i) => {
+    const v = pushQty(spec, dayType);
+    if(v===null) return `<td class="q-cell"><span class="q-none">-</span></td>`;
+    totals[i] += v;
+    const hint = typeof spec.f === "number"
+      ? `<div class="q-hint">mỗi ca trực quầy</div>`
+      : (v<1 && PUSH_HINT[v] ? `<div class="q-hint">≈ 1 mỗi ${PUSH_HINT[v]} ca</div>` : "");
+    return `<td class="q-cell"><div class="q-val">${fmtQty(v)}</div>${hint}</td>`;
+  };
+
+  let rows = "";
+  working.forEach(({r,c})=>{
+    const p = index[normName(r.name)];
+    const active = isShiftActiveNow(c);
+    const cells = cfg.products.map((pr,i)=>cell(p ? p[pr.key] : null, i)).join("");
+    rows += `<tr class="${active?"active":""}">
+      <td class="n-cell"><div class="emp-name">${escapeHtml(r.name)}</div><div class="emp-pos">${escapeHtml(p ? p.role : r.position)}${p?"":" · chưa có target"}</div></td>
+      <td class="t-cell mono">${escapeHtml(c.label)}${active?`<div class="active-pill"><span class="dot"></span>Đang làm</div>`:""}</td>
+      ${cells}
+    </tr>`;
+  });
+
+  const head = cfg.products.map(pr=>`<th>${pr.icon} ${pr.short}<span class="u">(${pr.unit})</span></th>`).join("");
+  const foot = cfg.products.map((pr,i)=>`<td class="q-cell"><div class="q-val">${Math.round(totals[i])}</div><div class="q-hint">${pr.unit}</div></td>`).join("");
+
+  box.innerHTML = `<div class="push-card">
+    <div class="push-head">
+      <div>
+        <div class="push-title">Target Push Sale hôm nay - Team Admin</div>
+        <div class="push-sub">${escapeHtml(cfg.title)} · số sản phẩm mỗi bạn cần push trong ca</div>
+      </div>
+      <span class="push-daytype dt${dayType}">${PUSH_DAY_LABELS[dayType]}</span>
+    </div>
+    ${working.length===0
+      ? `<div class="push-empty">Hôm nay không có ai của Team Admin trong ca.</div>`
+      : `<div class="push-table-wrap"><table class="push-table">
+          <thead><tr><th>Nhân viên</th><th>Ca</th>${head}</tr></thead>
+          <tbody>${rows}</tbody>
+          <tfoot><tr><td colspan="2" class="foot-lbl">Tổng team hôm nay</td>${foot}</tr></tfoot>
+        </table></div>`}
+  </div>`;
 }
 
 /* ============================================================ Tasks */
@@ -1007,7 +1173,7 @@ if(staleDataCleared){
 }
 // Keep the "Đang làm" (currently active) badges live without needing a manual refresh.
 setInterval(()=>{
-  if(scheduleData && selectedDate===todayIso()){ renderStats(); renderTeams(); }
+  if(scheduleData && selectedDate===todayIso()){ renderStats(); renderPush(); renderTeams(); }
 }, 30000);
 </script>
 </body>
