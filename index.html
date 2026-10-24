@@ -3,1178 +3,846 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Dashboard Điều Phối — Kohnan Parc Mall</title>
+<title>Lịch Làm Việc — Store 1016</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-  :root{
-    --paper:#EEF2F1; --panel:#FFFFFF; --panel2:#F5F7F6; --ink:#1C2B33; --ink-soft:#5B6B72; --line:#D7DEDC;
-    --steel:#33495A; --safety:#F2661D; --safety-soft:#FDE3D4;
-    --leave:#B9821F; --leave-soft:#F8ECD4; --off:#8A97A0; --off-soft:#E7EBEA;
-    --ok:#2E7D6B; --ok-soft:#DCEEE8; --night:#4A4EC1; --night-soft:#E4E4FA;
-    --sale:#B54708; --sale-soft:#FDF0E4; --admin:#1D5F91; --admin-soft:#E4EEF6;
-    --active:#1E8E5A; --active-soft:#DFF3E7;
-  }
-  *{box-sizing:border-box;}
-  body{margin:0;font-family:'IBM Plex Sans',-apple-system,sans-serif;background:var(--paper);color:var(--ink);}
-  .wrap{max-width:1180px;margin:0 auto;padding:22px 20px 60px;}
-  .disp{font-family:'Oswald','IBM Plex Sans',sans-serif;letter-spacing:.01em;}
-  .mono{font-family:'IBM Plex Mono',monospace;}
-  h1,h2,h3{margin:0;}
-  button{font-family:inherit;cursor:pointer;}
-  input,select{font-family:inherit;}
+:root{
+  color-scheme:light;
+  --navy:#0039a6;--kred:#e8082c;--bg:#f2f5fb;--ink:#16202c;--ink2:#465364;
+  --line:#e3e7ec;--blue-soft:#e8f0fa;--kred-soft:#fde7eb;--card-line:#e1e7f2;
+  --ok:#1f8a4c;--ok-soft:#e3f4ea;--warn:#f5b800;--warn-soft:#fff5d6;
+  --bad:#d63b2f;--bad-soft:#fde7eb;
+  --off:#8a97a0;--off-soft:#e7ebea;
+  --leave:#b9821f;--leave-soft:#f8ecd4;
+  --night:#4a4ec1;--night-soft:#e4e4fa;
+  --panel:#fff;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;overflow-x:hidden;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left,0px));}
+h1,h2,h3{margin:0;}
+button{font-family:inherit;cursor:pointer;}
+input,select{font-family:inherit;}
 
-  .toolbar{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
-  .btn{display:inline-flex;align-items:center;gap:7px;border:none;border-radius:8px;padding:10px 16px;font-weight:600;font-size:13.5px;}
-  .btn-primary{background:var(--safety);color:#fff;}
-  .btn-ghost{background:var(--panel2);border:1px solid var(--line);color:var(--ink);}
-  .btn-safety{background:var(--safety);color:#fff;}
-  .btn-sm{padding:6px 10px;font-size:12.5px;border-radius:7px;}
+/* ===== HERO ===== */
+.hero{background:#fff;border-bottom:1px solid var(--card-line);}
+.hero .wrap{display:flex;align-items:flex-end;gap:24px;padding-top:24px;padding-bottom:0;}
+.hero-main{flex:1;min-width:0;padding-bottom:24px;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand-logo{font-size:22px;font-weight:800;color:var(--navy);letter-spacing:.04em;}
+.brand-sep{color:var(--line);font-size:18px;}
+.brand-sub{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--ink2);}
+.group-tag{display:inline-block;margin-top:14px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--kred);}
+h1{margin:6px 0 0;color:var(--navy);font-size:clamp(24px,3.6vw,36px);font-weight:800;line-height:1.15;}
+h1 small{display:block;font-size:.56em;font-weight:700;opacity:.8;margin-top:3px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.chip{background:var(--blue-soft);color:var(--navy);font-size:12px;font-weight:600;padding:4px 12px;border-radius:999px;}
+.chip.red{background:var(--kred-soft);color:var(--kred);}
+.mascot{width:150px;height:auto;flex:none;align-self:flex-end;}
 
-  .meta{font-size:12px;color:var(--ink-soft);margin-bottom:16px;display:flex;gap:6px;flex-wrap:wrap;}
+/* ===== NAV ===== */
+.nav{position:sticky;top:0;z-index:20;background:var(--navy);}
+.nav .wrap{display:flex;align-items:center;gap:18px;height:46px;overflow-x:auto;scrollbar-width:none;}
+.nav-logo{background:#fff;border-radius:6px;padding:3px 8px;font-weight:800;font-size:11px;color:var(--navy);letter-spacing:.04em;white-space:nowrap;flex:none;}
+.nav a{color:#fff;text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap;opacity:.85;}
+.nav a:hover{opacity:1;}
 
-  .dropzone{border:2px dashed var(--line);border-radius:14px;background:var(--panel);padding:44px 20px;text-align:center;transition:.15s;}
-  .dropzone.drag{border-color:var(--safety);background:var(--safety-soft);}
-  .dropzone .lbl{font-size:16px;font-weight:600;color:var(--ink);margin-top:8px;}
-  .dropzone .sub{font-size:13px;color:var(--ink-soft);margin-top:6px;max-width:420px;margin-left:auto;margin-right:auto;}
+/* ===== TOOLBAR ===== */
+.toolbar{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px;padding:14px 0 10px;}
+.btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:20px;padding:8px 16px;font-weight:700;font-size:13px;cursor:pointer;}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-kred{background:var(--kred);color:#fff;}
+.btn-ghost{background:#fff;color:var(--navy);border:2px solid var(--navy);}
+.btn-sm{padding:6px 12px;font-size:12px;}
 
-  /* ---- Hero ---- */
-  .hero{position:relative;overflow:hidden;background:linear-gradient(135deg, #FCE7D6 0%, var(--panel) 55%);border:1px solid var(--line);border-radius:16px;padding:26px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:16px;}
-  .hero::before{content:"";position:absolute;top:-60px;left:-60px;width:220px;height:220px;background:radial-gradient(circle, rgba(242,102,29,0.14), transparent 70%);pointer-events:none;}
-  .hero-logo{font-family:'Oswald',sans-serif;font-weight:700;font-size:26px;letter-spacing:.04em;color:var(--safety);}
-  .hero-sub{font-size:11.5px;letter-spacing:.12em;color:var(--ink-soft);margin-top:4px;text-transform:uppercase;}
-  .hero-right{display:flex;align-items:baseline;gap:14px;text-align:right;}
-  .hero-daynum{font-family:'Oswald',sans-serif;font-weight:700;font-size:64px;line-height:1;color:var(--steel);}
-  .hero-daymeta{font-size:14px;color:var(--ink-soft);}
-  .hero-weekday{color:var(--safety);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:12.5px;margin-top:2px;}
-  .hero-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;justify-content:flex-end;}
-  .day-badge{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:6px;padding:3px 8px;}
-  .day-badge.weekend{background:var(--night-soft);color:var(--night);}
-  .day-badge.mid{background:var(--admin-soft);color:var(--admin);}
-  .day-badge.holiday{background:var(--safety-soft);color:var(--safety);}
+/* ===== DROPZONE ===== */
+.dropzone{border:2px dashed var(--card-line);border-radius:14px;background:#fff;padding:40px 20px;text-align:center;cursor:pointer;transition:.15s;margin-bottom:16px;}
+.dropzone:hover,.dropzone.drag{border-color:var(--navy);background:var(--blue-soft);}
+.dropzone .dz-ico{font-size:28px;color:var(--navy);}
+.dropzone .dz-lbl{font-size:15px;font-weight:700;color:var(--ink);margin-top:8px;}
+.dropzone .dz-sub{font-size:13px;color:var(--ink2);margin-top:4px;}
 
-  .target-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:16px;}
-  .target-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;}
-  .target-card .lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);}
-  .target-card .val{font-family:'Oswald',sans-serif;font-size:22px;font-weight:700;color:var(--steel);margin-top:2px;}
-  .target-card.pretax{border-left:4px solid var(--admin);}
-  .target-card.posttax{border-left:4px solid var(--safety);}
+/* ===== CONTROLS ===== */
+.controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--card-line);border-radius:12px;padding:12px;margin-bottom:14px;}
+.navbtn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:2px solid var(--navy);border-radius:8px;background:#fff;color:var(--navy);font-weight:700;}
+.navbtn:disabled{border-color:var(--line);color:var(--off);cursor:not-allowed;}
+.date-label{font-size:16px;font-weight:700;color:var(--navy);}
+input[type=date]{border:1px solid var(--card-line);border-radius:8px;padding:7px 10px;font-size:13px;background:var(--bg);color:var(--ink);color-scheme:light;}
+.search-wrap{position:relative;flex:1 1 200px;}
+.search-wrap input{width:100%;padding:8px 10px 8px 30px;border:1px solid var(--card-line);border-radius:8px;font-size:13px;background:var(--bg);color:var(--ink);}
+.search-wrap svg{position:absolute;left:9px;top:9px;color:var(--ink2);}
 
-  .note-banner{display:flex;align-items:flex-start;gap:10px;background:var(--leave-soft);border:1px solid var(--leave);border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13.5px;color:#7A5810;}
-  .note-banner .ic{font-size:18px;flex-shrink:0;}
-  .note-banner b{font-weight:700;}
+/* ===== META ===== */
+.meta{font-size:12px;color:var(--ink2);margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+.meta .dot{color:var(--line);}
 
-  .controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:16px;}
-  .navbtn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--ink);}
-  .navbtn:disabled{background:var(--off-soft);color:var(--off);cursor:not-allowed;}
-  .dateLabel{font-size:17px;font-weight:600;color:var(--ink);}
-  input[type=date],.search-input{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13.5px;background:var(--panel2);color:var(--ink);color-scheme:light;}
-  .search-wrap{position:relative;flex:1 1 200px;}
-  .search-wrap input{width:100%;padding:8px 10px 8px 30px;box-sizing:border-box;border:1px solid var(--line);border-radius:8px;font-size:13.5px;background:var(--panel2);color:var(--ink);}
-  .search-wrap svg{position:absolute;left:9px;top:9px;color:var(--ink-soft);}
+/* ===== DAY HEADER ===== */
+.day-head{background:#fff;border:1px solid var(--card-line);border-radius:12px;padding:16px 18px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.day-num{font-size:52px;font-weight:800;color:var(--navy);line-height:1;}
+.day-info{text-align:right;}
+.day-weekday{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--kred);}
+.day-monthyr{font-size:14px;color:var(--ink2);}
+.day-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-top:6px;}
+.day-badge{font-size:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;border-radius:6px;padding:3px 8px;}
+.day-badge.weekend{background:var(--night-soft,#e4e4fa);color:var(--night);}
+.day-badge.mid{background:var(--blue-soft);color:var(--navy);}
+.day-badge.holiday{background:var(--kred-soft);color:var(--kred);}
 
-  /* ---- Stats ---- */
-  .stats-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;flex:1;}
-  .stat{position:relative;background:var(--panel);border-radius:10px;padding:14px 16px 14px 18px;border-left:4px solid var(--accent,var(--safety));}
-  .stat .val{font-size:26px;font-weight:700;color:var(--steel);font-family:'Oswald',sans-serif;}
-  .stat .lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);margin-top:2px;}
-  .legend-chip{display:inline-flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:11.5px;color:var(--ink-soft);white-space:nowrap;}
-  .legend-chip .tag{background:var(--leave-soft);color:var(--leave);border-radius:6px;padding:2px 6px;font-weight:700;font-size:10.5px;}
+/* ===== NOTE BANNER ===== */
+.note-banner{display:flex;align-items:flex-start;gap:10px;background:var(--leave-soft);border:1px solid var(--leave);border-radius:10px;padding:11px 14px;margin-bottom:14px;font-size:13.5px;color:#7a5810;}
+.note-banner b{font-weight:700;}
 
-  /* ---- Teams ---- */
-  .teams{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px;}
-  @media(max-width:760px){.teams{grid-template-columns:1fr;}}
-  .team-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
-  .team-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;}
-  .team-head .name{font-weight:700;font-size:15px;font-family:'Oswald',sans-serif;letter-spacing:.03em;text-transform:uppercase;color:var(--steel);}
-  .team-count{font-size:12px;font-weight:600;color:var(--ink-soft);}
-  .team-body{padding:0 18px 16px;}
+/* ===== STATS ===== */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px;}
+.stat{background:#fff;border:1px solid var(--card-line);border-radius:10px;padding:14px 16px;border-top:4px solid var(--accent,var(--navy));}
+.stat .v{font-size:26px;font-weight:800;color:var(--navy);line-height:1.1;}
+.stat .l{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);margin-top:2px;}
 
-  .shift-group-head{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--line);}
-  .shift-group:first-child .shift-group-head{border-top:none;padding-top:0;margin-top:0;}
-  .shift-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+/* ===== TARGET STRIP ===== */
+.target-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:16px;}
+.target-card{background:#fff;border:1px solid var(--card-line);border-radius:12px;padding:14px 16px;}
+.target-card .tl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);}
+.target-card .tv{font-size:22px;font-weight:800;color:var(--navy);margin-top:2px;}
+.target-card.pretax{border-left:4px solid var(--navy);}
+.target-card.posttax{border-left:4px solid var(--kred);}
 
-  .emp-row{position:relative;display:flex;align-items:center;gap:12px;background:var(--panel2);border:1px solid transparent;border-radius:10px;padding:10px 12px;margin-bottom:8px;}
-  .emp-row.active{border-color:var(--active);box-shadow:0 0 0 1px var(--active) inset;}
-  .emp-time{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;min-width:96px;color:var(--ink-soft);}
-  .emp-time.off{color:var(--off);}
-  .emp-time .short-badge{display:inline-block;margin-left:5px;background:var(--leave-soft);color:var(--leave);border-radius:5px;padding:1px 5px;font-size:9.5px;font-weight:700;vertical-align:middle;}
-  .emp-info{flex:1;min-width:0;}
-  .emp-name{font-weight:600;font-size:14px;color:var(--ink);}
-  .emp-pos{font-size:11.5px;color:var(--ink-soft);}
-  .active-pill{display:inline-flex;align-items:center;gap:4px;color:var(--active);font-size:10.5px;font-weight:700;margin-top:2px;}
-  .active-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--active);animation:pulse 1.6s infinite;}
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
-  .emp-actions{flex-shrink:0;position:relative;}
-  .phone-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--ink-soft);display:flex;align-items:center;justify-content:center;font-size:14px;}
-  .phone-btn:hover{color:var(--safety);border-color:var(--safety);}
-  .phone-pop{position:absolute;right:0;top:38px;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 20px rgba(28,43,51,0.14);padding:6px;z-index:20;min-width:150px;}
-  .phone-pop a{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;font-size:12.5px;color:var(--ink);text-decoration:none;white-space:nowrap;}
-  .phone-pop a:hover{background:var(--panel);}
-  .empty{padding:30px;text-align:center;color:var(--ink-soft);font-size:13px;}
+/* ===== SM BOX ===== */
+.sm-box{margin-bottom:14px;}
 
+/* ===== TEAMS ===== */
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+@media(max-width:720px){.teams{grid-template-columns:1fr;}}
+.team-card{background:#fff;border:1px solid var(--card-line);border-radius:12px;overflow:hidden;}
+.team-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--card-line);}
+.team-name{font-weight:800;font-size:13px;letter-spacing:.05em;text-transform:uppercase;color:var(--navy);}
+.team-count{font-size:12px;color:var(--ink2);}
+.team-body{padding:10px 16px 14px;}
 
-  /* ---- SM + Push sale target ---- */
-  .sm-box{margin-bottom:16px;}
-  .sm-box:empty{display:none;}
-  .push-box{margin-bottom:16px;}
-  .push-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
-  .push-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:16px 18px 12px;background:linear-gradient(135deg,#FCE7D6 0%,var(--panel) 60%);}
-  .push-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:15px;letter-spacing:.03em;text-transform:uppercase;color:var(--steel);}
-  .push-sub{font-size:12px;color:var(--ink-soft);margin-top:2px;}
-  .push-daytype{font-size:12px;font-weight:700;border-radius:999px;padding:5px 12px;background:var(--off-soft);color:var(--ink-soft);white-space:nowrap;}
-  .push-daytype.dt1{background:var(--admin-soft);color:var(--admin);}
-  .push-daytype.dt2{background:var(--leave-soft);color:var(--leave);}
-  .push-daytype.dt3{background:var(--safety);color:#fff;}
-  .push-table-wrap{overflow-x:auto;padding:0 18px 14px;}
-  .push-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px;}
-  .push-table th{text-align:center;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap;}
-  .push-table th:first-child,.push-table th:nth-child(2){text-align:left;}
-  .push-table th .u{display:block;font-weight:500;text-transform:none;letter-spacing:0;font-size:10.5px;}
-  .push-table td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle;}
-  .push-table tr.active td{background:var(--active-soft);}
-  .push-table .n-cell{min-width:150px;}
-  .push-table .t-cell{font-size:12px;font-weight:600;color:var(--ink-soft);white-space:nowrap;}
-  .push-table .q-cell{text-align:center;min-width:92px;}
-  .q-val{font-family:'Oswald',sans-serif;font-weight:700;font-size:20px;color:var(--steel);line-height:1.1;}
-  .q-hint{font-size:10.5px;color:var(--ink-soft);margin-top:2px;}
-  .q-none{color:var(--off);}
-  .push-table tfoot td{border-bottom:none;background:var(--panel2);}
-  .push-table .foot-lbl{font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);}
-  .push-empty{padding:22px 18px;font-size:13px;color:var(--ink-soft);}
+.shift-group-head{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);margin:12px 0 7px;padding-top:10px;border-top:1px solid var(--line);}
+.shift-group:first-child .shift-group-head{border-top:none;padding-top:0;margin-top:0;}
+.shift-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
-  .panel-title{display:flex;align-items:center;justify-content:space-between;margin:26px 0 12px;}
-  .panel-title h2{font-size:19px;color:var(--ink);}
-  .panel-title .actions{display:flex;gap:8px;}
+.emp-row{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid transparent;border-radius:10px;padding:9px 11px;margin-bottom:7px;}
+.emp-row.active{border-color:var(--ok);box-shadow:0 0 0 1px var(--ok) inset;}
+.emp-time{font-size:12px;font-weight:600;min-width:90px;color:var(--ink2);font-variant-numeric:tabular-nums;}
+.emp-time.off{color:var(--off);}
+.emp-time .short-b{display:inline-block;margin-left:4px;background:var(--leave-soft);color:var(--leave);border-radius:5px;padding:1px 4px;font-size:9px;font-weight:700;}
+.emp-info{flex:1;min-width:0;}
+.emp-name{font-weight:700;font-size:13.5px;color:var(--ink);}
+.emp-pos{font-size:11px;color:var(--ink2);}
+.active-pill{display:inline-flex;align-items:center;gap:4px;color:var(--ok);font-size:10px;font-weight:700;margin-top:2px;}
+.active-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);animation:pulse 1.6s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.phone-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--card-line);background:#fff;color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.phone-btn:hover{color:var(--navy);border-color:var(--navy);}
+.phone-pop{position:absolute;right:0;top:36px;background:#fff;border:1px solid var(--card-line);border-radius:10px;box-shadow:0 8px 20px rgba(0,57,166,.12);padding:6px;z-index:20;min-width:160px;}
+.phone-pop a{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;font-size:12.5px;color:var(--ink);text-decoration:none;white-space:nowrap;}
+.phone-pop a:hover{background:var(--blue-soft);}
+.emp-actions{flex-shrink:0;position:relative;}
+.empty-msg{padding:24px;text-align:center;color:var(--ink2);font-size:13px;}
 
-  .task-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-  .task-list{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;}
-  .task-row{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-top:1px solid var(--line);}
-  .task-row:first-child{border-top:none;}
-  .task-row.done .task-title{text-decoration:line-through;color:var(--ink-soft);}
-  .task-check{width:20px;height:20px;border-radius:5px;border:1.6px solid var(--line);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;background:var(--panel2);color:var(--ink);}
-  .task-check.checked{background:var(--ok);border-color:var(--ok);color:#fff;}
-  .task-body{flex:1;min-width:0;}
-  .task-title{font-size:13.5px;font-weight:600;color:var(--ink);}
-  .task-sub{font-size:11.5px;color:var(--ink-soft);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;}
-  .assignee-pill{background:var(--admin-soft);color:var(--admin);border-radius:999px;padding:2px 9px;font-weight:600;}
-  .task-del{background:none;border:none;color:var(--off);padding:4px;border-radius:6px;}
-  .task-del:hover{background:var(--off-soft);color:var(--safety);}
+/* ===== PUSH SALE ===== */
+.push-card{background:#fff;border:1px solid var(--card-line);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+.push-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:14px 16px 12px;border-bottom:1px solid var(--card-line);}
+.push-title{font-weight:800;font-size:14px;letter-spacing:.03em;text-transform:uppercase;color:var(--navy);}
+.push-sub{font-size:12px;color:var(--ink2);margin-top:2px;}
+.push-daytype{font-size:11px;font-weight:700;border-radius:999px;padding:4px 12px;background:var(--off-soft);color:var(--off);}
+.push-daytype.dt1{background:var(--blue-soft);color:var(--navy);}
+.push-daytype.dt2{background:var(--leave-soft);color:var(--leave);}
+.push-daytype.dt3{background:var(--kred);color:#fff;}
+.push-table-wrap{overflow-x:auto;padding:0 16px 14px;}
+.push-table{width:100%;border-collapse:collapse;font-size:13px;min-width:520px;}
+.push-table th{text-align:center;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--navy);padding:9px 8px;white-space:nowrap;}
+.push-table th:first-child,.push-table th:nth-child(2){text-align:left;}
+.push-table th .u{display:block;font-weight:500;text-transform:none;letter-spacing:0;font-size:10px;opacity:.8;}
+.push-table td{padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:middle;}
+.push-table tbody tr:nth-child(even) td{background:#fafbfc;}
+.push-table tbody tr.active td{background:var(--ok-soft);}
+.push-table tfoot td{border-bottom:none;background:var(--blue-soft);font-weight:700;}
+.q-val{font-size:18px;font-weight:800;color:var(--navy);text-align:center;}
+.q-hint{font-size:10px;color:var(--ink2);text-align:center;margin-top:1px;}
+.q-none{color:var(--off);text-align:center;}
 
-  .add-task-form{display:flex;gap:8px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px;}
-  .add-task-form input[type=text]{flex:2 1 220px;border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:13.5px;background:var(--panel2);color:var(--ink);}
-  .add-task-form select{flex:1 1 140px;border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:13.5px;background:var(--panel2);color:var(--ink);}
+/* ===== TASK SECTION ===== */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin:24px 0 12px;flex-wrap:wrap;gap:10px;}
+.sec-title{display:flex;align-items:center;gap:10px;}
+.sec-num{width:34px;height:34px;border-radius:50%;background:var(--kred);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;flex:none;}
+.sec-label{font-size:20px;font-weight:800;color:var(--navy);}
 
-  .banner{display:flex;align-items:flex-start;gap:10px;border-radius:10px;padding:12px;font-size:13.5px;margin-bottom:14px;}
-  .banner.warn{background:var(--safety-soft);border:1px solid var(--safety);color:#8A3512;}
-  .banner.info{background:var(--admin-soft);border:1px solid var(--admin);color:var(--admin);}
-  .banner button{background:none;border:none;color:inherit;}
+.add-task-form{display:flex;gap:8px;flex-wrap:wrap;background:#fff;border:1px solid var(--card-line);border-radius:12px;padding:12px;margin-bottom:10px;}
+.add-task-form input[type=text]{flex:2 1 200px;border:1px solid var(--card-line);border-radius:8px;padding:8px 10px;font-size:13.5px;background:var(--bg);color:var(--ink);}
+.add-task-form select{flex:1 1 140px;border:1px solid var(--card-line);border-radius:8px;padding:8px 10px;font-size:13.5px;background:var(--bg);color:var(--ink);}
 
-  .footer-note{font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:30px;}
+.task-list{background:#fff;border:1px solid var(--card-line);border-radius:12px;overflow:hidden;margin-bottom:16px;}
+.task-row{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-top:1px solid var(--line);}
+.task-row:first-child{border-top:none;}
+.task-row.done .task-title{text-decoration:line-through;color:var(--ink2);}
+.task-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--card-line);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--ink);}
+.task-check.checked{background:var(--ok);border-color:var(--ok);color:#fff;}
+.task-body{flex:1;min-width:0;}
+.task-title{font-size:13.5px;font-weight:600;color:var(--ink);}
+.task-sub{font-size:11.5px;color:var(--ink2);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;}
+.assignee-pill{background:var(--blue-soft);color:var(--navy);border-radius:999px;padding:2px 9px;font-weight:600;}
+.task-del{background:none;border:none;color:var(--off);padding:4px;border-radius:6px;}
+.task-del:hover{background:var(--kred-soft);color:var(--kred);}
 
-  @media print{
-    .no-print{display:none !important;}
-    body{background:#fff;color:#000;}
-    .dropzone{display:none;}
-  }
+/* ===== BANNERS ===== */
+.banner{display:flex;align-items:flex-start;gap:10px;border-radius:10px;padding:11px 14px;font-size:13.5px;margin-bottom:12px;}
+.banner.warn{background:var(--kred-soft);border:1px solid var(--kred);color:#8a1a1a;}
+.banner.info{background:var(--blue-soft);border:1px solid var(--navy);color:var(--navy);}
+.banner.ok{background:var(--ok-soft);border:1px solid var(--ok);color:#155030;}
+.banner button{background:none;border:none;color:inherit;font-size:16px;flex-shrink:0;padding:0;}
+
+/* ===== GSHEET NOTE ===== */
+.gsheet-tip{background:var(--blue-soft);border:1px solid var(--navy);border-radius:12px;padding:14px 16px;margin-bottom:14px;font-size:13px;color:var(--navy);}
+.gsheet-tip a{color:var(--kred);font-weight:700;}
+
+@media(max-width:640px){
+  .hero .wrap{flex-direction:column;align-items:flex-start;gap:0;}
+  .mascot{width:110px;align-self:flex-end;}
+  h1{font-size:22px;}
+}
+@media print{
+  .no-print{display:none !important;}
+  body{background:#fff;}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-main">
+      <div class="brand">
+        <span class="brand-logo">KOHNAN</span>
+        <span class="brand-sep">|</span>
+        <span class="brand-sub">STORE 1016 · PARC MALL</span>
+      </div>
+      <div class="group-tag">📅 LỊCH LÀM VIỆC</div>
+      <h1>Điều phối ca trực<small>Dashboard lịch nhân viên tháng 10/2026</small></h1>
+      <div class="chips">
+        <span class="chip">22 nhân viên</span>
+        <span class="chip">SM · Admin · CS &amp; SC · Sale</span>
+        <span class="chip red">T10/2026</span>
+        <span class="chip">Push Sale Target</span>
+      </div>
+    </div>
+    <img class="mascot no-print" src="https://i.imgur.com/placeholder.png"
+      onerror="this.style.display='none'"
+      alt="Kotan" />
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="wrap">
+    <div class="nav-logo">KOHNAN 1016</div>
+    <a href="#schedule">📋 Lịch ca</a>
+    <a href="#push">🎯 Push Sale</a>
+    <a href="#tasks">✅ Công việc</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="wrap" style="padding-top:16px;padding-bottom:60px;">
 
   <div class="toolbar no-print">
-    <button class="btn btn-ghost" onclick="window.print()">🖨️ In trang</button>
-    <button class="btn btn-ghost" id="btnResetData" title="Xóa toàn bộ dữ liệu lịch & công việc đã lưu trong trình duyệt">🗑️ Xóa dữ liệu đã lưu</button>
-    <button class="btn btn-primary" id="btnPickSchedule">⬆️ Tải file lịch ca</button>
+    <button class="btn btn-ghost btn-sm" onclick="window.print()">🖨️ In trang</button>
+    <button class="btn btn-ghost btn-sm" id="btnReset">🗑️ Xóa dữ liệu</button>
+    <button class="btn btn-primary btn-sm" id="btnPickFile">⬆️ Tải file lịch ca (.xlsx)</button>
   </div>
 
-  <div class="hero">
-    <div>
-      <div class="hero-logo">KOHNAN</div>
-      <div class="hero-sub">Parc Mall · Lịch trực <span id="heroWhen">hôm nay</span></div>
-    </div>
-    <div class="hero-right">
-      <div class="hero-daynum" id="heroDayNum">—</div>
-      <div>
-        <div class="hero-daymeta" id="heroMonthYear">—</div>
-        <div class="hero-weekday" id="heroWeekday">—</div>
-        <div class="hero-badges" id="heroBadges"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="meta" id="scheduleMeta"></div>
-
-  <div id="targetStrip" class="target-strip" style="display:none;"></div>
-  <div id="noteBanner"></div>
-
-  <input type="file" id="scheduleFile" accept=".xlsx,.xls" style="display:none" />
-  <input type="file" id="taskFile" accept=".xlsx,.xls,.csv" style="display:none" />
-
-  <div id="scheduleUploadZone" class="dropzone no-print" style="cursor:pointer;">
-    <div style="font-size:30px;color:var(--safety);">⬆️</div>
-    <div class="lbl">Kéo thả hoặc bấm để tải file lịch làm việc (.xlsx)</div>
-    <div class="sub">Dữ liệu (kèm số điện thoại nếu file có sheet thông tin nhân viên) sẽ được lưu ngay trên trình duyệt này — lần sau mở lại không cần tải lại, trừ khi có lịch tháng mới.</div>
-  </div>
-
-  <div id="scheduleApp" style="display:none;">
-
-    <div class="controls no-print">
-      <button class="navbtn" id="prevDay" aria-label="Ngày trước">‹</button>
-      <div style="display:flex;align-items:center;gap:10px;flex:1 1 220px;">
-        <span style="font-size:18px;">📅</span>
-        <div class="dateLabel disp" id="dateLabel">—</div>
-      </div>
-      <input type="date" id="datePicker" class="mono" />
-      <button class="btn btn-ghost btn-sm" id="btnToday">Hôm nay</button>
-      <button class="navbtn" id="nextDay" aria-label="Ngày sau">›</button>
-      <div class="search-wrap">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-        <input id="searchBox" placeholder="Tìm theo tên nhân viên..." />
-      </div>
-    </div>
-
-    <div class="stats-row">
-      <div class="stats" id="statsRow"></div>
-      <div class="legend-chip"><span class="tag">4h</span> = ca dưới 8 tiếng</div>
-    </div>
-
-    <div id="smBox" class="sm-box"></div>
-    <div id="pushBox" class="push-box"></div>
-
-    <div class="teams" id="teamsBox"></div>
-  </div>
-
-  <div class="panel-title">
-    <h2 class="disp">Công việc hôm nay — phân công &amp; điều phối</h2>
-    <div class="actions no-print">
-      <button class="btn btn-ghost btn-sm" id="btnPickTasks">⬆️ Tải file công việc</button>
-    </div>
-  </div>
-
+  <div id="metaBar" class="meta"></div>
   <div id="taskBanner"></div>
 
-  <div class="add-task-form no-print">
-    <input type="text" id="newTaskTitle" placeholder="Nhập việc cần làm hôm nay..." />
-    <select id="newTaskAssignee"><option value="">— Chưa phân công —</option></select>
-    <button class="btn btn-safety" id="btnAddTask">+ Thêm việc</button>
+  <!-- DROPZONE (ẩn khi đã có dữ liệu) -->
+  <div id="dropzone" class="dropzone no-print">
+    <div class="dz-ico">⬆️</div>
+    <div class="dz-lbl">Kéo thả hoặc bấm để tải file lịch ca (.xlsx)</div>
+    <div class="dz-sub">Dữ liệu lưu trong trình duyệt — lần sau mở không cần tải lại<br>
+      <b>Dữ liệu tháng 10/2026 đã nhúng sẵn</b> — bấm vào để cập nhật từ file mới hơn</div>
   </div>
 
-  <div class="task-list" id="taskList"></div>
+  <div class="gsheet-tip no-print" id="gsheetTip">
+    💡 <b>Google Sheets:</b> File lịch từ
+    <a href="https://docs.google.com/spreadsheets/d/1s1Lz3igrehwS2Waa7KKShjkeF5h_JXia/edit?gid=1762028686" target="_blank">link này</a>
+    — tải về định dạng .xlsx rồi bấm <b>Tải file lịch ca</b> để cập nhật. Dữ liệu T10/2026 đã được nhúng sẵn trong trang.
+  </div>
 
-  <div class="footer-note">Dữ liệu lịch ca &amp; công việc được lưu cục bộ trên trình duyệt đang mở file này. Mở file trên máy/trình duyệt khác sẽ không thấy dữ liệu đã lưu — hãy tải lại file lịch nếu cần.</div>
+  <!-- SCHEDULE APP -->
+  <div id="scheduleApp">
 
-</div>
+    <section id="schedule">
+      <!-- Controls -->
+      <div class="controls no-print">
+        <button class="navbtn" id="prevDay">‹</button>
+        <div style="flex:1;min-width:120px;">
+          <div class="date-label" id="dateLabel">—</div>
+        </div>
+        <input type="date" id="datePicker" />
+        <button class="btn btn-ghost btn-sm" id="btnToday">Hôm nay</button>
+        <button class="navbtn" id="nextDay">›</button>
+        <div class="search-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="searchBox" placeholder="Tìm tên nhân viên..." />
+        </div>
+      </div>
+
+      <!-- Day header -->
+      <div class="day-head">
+        <div class="day-num" id="dayNum">—</div>
+        <div class="day-info">
+          <div class="day-weekday" id="dayWeekday">—</div>
+          <div class="day-monthyr" id="dayMonthYr">—</div>
+          <div class="day-badges" id="dayBadges"></div>
+        </div>
+      </div>
+
+      <!-- Note banner -->
+      <div id="noteBanner"></div>
+
+      <!-- Target strip -->
+      <div id="targetStrip" style="display:none;" class="target-strip"></div>
+
+      <!-- Stats -->
+      <div class="stats-row" id="statsRow"></div>
+
+      <!-- SM -->
+      <div id="smBox" class="sm-box"></div>
+    </section>
+
+    <!-- Push Sale -->
+    <section id="push">
+      <div id="pushBox"></div>
+    </section>
+
+    <!-- Teams -->
+    <div class="teams" id="teamsBox"></div>
+
+  </div><!-- /scheduleApp -->
+
+  <!-- TASKS -->
+  <section id="tasks">
+    <div class="sec-head">
+      <div class="sec-title">
+        <div class="sec-num">✓</div>
+        <div class="sec-label">Công việc hôm nay</div>
+      </div>
+      <button class="btn btn-ghost btn-sm no-print" id="btnPickTasks">⬆️ Tải file công việc</button>
+    </div>
+    <div id="taskSubBanner"></div>
+    <div class="add-task-form no-print">
+      <input type="text" id="newTaskTitle" placeholder="Nhập việc cần làm hôm nay..." />
+      <select id="newTaskAssignee"><option value="">— Chưa phân công —</option></select>
+      <button class="btn btn-primary" id="btnAddTask">+ Thêm</button>
+    </div>
+    <div class="task-list" id="taskList"></div>
+  </section>
+
+</main>
+
+<input type="file" id="scheduleFile" accept=".xlsx,.xls" style="display:none" />
+<input type="file" id="taskFile" accept=".xlsx,.xls,.csv" style="display:none" />
 
 <script>
-/* ============================================================ Utilities */
-const $ = (sel) => document.querySelector(sel);
-const WEEKDAYS_VI = ["Chủ Nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"];
-const MONTHS_VI = ["Tháng 1","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"];
+/* ===== DATA T10/2026 (trích từ file Excel) ===== */
+const BUILTIN_MONTH = "2026-10";
+const BUILTIN_NOTES = {"1":"CƯ DÂN TOPAZ ELITE","3":"SET UP SẢNH PET","4":"DỌN SẢNH PET","5":"GIẢM 5%","6":"NHẬN NOHHI","10":"SETUP SẢNH TẦNG 1","11":"CHẠY SẢNH","12":"CHẠY SẢNH","13":"CHẠY SẢNH · học training","14":"CHẠY SẢNH","15":"CHẠY SẢNH","16":"CHẠY SẢNH","17":"CHẠY SẢNH","18":"CHẠY SẢNH","19":"CHẠY SẢNH","20":"CHẠY SẢNH · GIẢM 5%","21":"CHẠY SẢNH","22":"CHẠY SẢNH · TRAINING ONLINE","23":"CHẠY SẢNH · TRAINING ONLINE","24":"CHẠY SẢNH","25":"CHẠY SẢNH","26":"CHẠY SẢNH · ÔN TẬP ONLINE","27":"DỌN SẢNH","28":"HỌC TRAINING TẠI 1001"};
+const BUILTIN_STAFF = [
+{"name":"NGUYỄN HOÀNG DŨNG","pos":"SM","phone":"","shifts":{"1":"10:30 ~ 18:30","2":"10:30 ~ 18:30","3":"OFF","4":"10:30 ~ 18:30","5":"12:00 ~ 20:00","6":"12:00 ~ 20:00","7":"18:00 ~ 22:00","8":"10:30 ~ 18:30","9":"OFF","10":"10:30 ~ 18:30","11":"14:30 ~ 22:30","12":"12:00 ~ 20:00","13":"12:00 ~ 20:00","14":"OFF","15":"18:30 ~ 22:30","16":"12:00 ~ 20:00","17":"12:00 ~ 20:00","18":"10:30 ~ 18:30"}},
+{"name":"Dương Xuân Hoàng Ngân","pos":"Admin Chief","phone":"0908341971","shifts":{"1":"14:30 ~ 22:30","2":"14:30 ~ 18:30","3":"AL","4":"14:30 ~ 22:30","5":"09:00 ~ 17:00","6":"09:00 ~ 13:00","7":"09:00 ~ 17:00","8":"OFF","9":"09:00 ~ 17:00","10":"07:30 ~ 15:30","11":"07:30 ~ 15:30","12":"OFF","13":"14:30 ~ 22:30","14":"14:30 ~ 22:30","15":"14:30 ~ 18:30","16":"14:30 ~ 22:30","17":"14:30 ~ 22:30","18":"14:30 ~ 22:30","19":"07:30 ~ 15:30","20":"07:30 ~ 15:30","21":"07:30 ~ 15:30","22":"OFF","23":"09:00 ~ 17:00","24":"08:00 ~ 12:00","25":"07:30 ~ 15:30","26":"14:30 ~ 22:30","27":"14:30 ~ 22:30","28":"OFF","29":"14:30 ~ 22:30","30":"09:00 ~ 13:00","31":"14:30 ~ 22:30"}},
+{"name":"VÕ ĐẶNG TÚ QUYÊN","pos":"Admin","phone":"0902305684","shifts":{"1":"18:30 ~ 22:30","2":"14:30 ~ 22:30","3":"14:30 ~ 22:30","4":"14:30 ~ 22:30","5":"OFF","6":"13:00 ~ 17:00","7":"AL","8":"SL","9":"AL","10":"07:30 ~ 15:30","11":"08:00 ~ 16:00","12":"14:30 ~ 22:30","13":"OFF","14":"14:30 ~ 22:30","15":"18:30 ~ 22:30","16":"14:30 ~ 22:30","17":"14:30 ~ 22:30","18":"14:30 ~ 22:30","19":"11:00 ~ 15:00","20":"09:00 ~ 17:00","21":"OFF","22":"07:30 ~ 15:30","23":"07:30 ~ 15:30","24":"07:30 ~ 15:30","25":"14:30 ~ 22:30","26":"14:30 ~ 22:30","27":"OFF","28":"14:30 ~ 22:30","29":"14:30 ~ 18:30","30":"14:30 ~ 22:30","31":"14:30 ~ 22:30"}},
+{"name":"NGUYỄN LÊ MINH THƯ","pos":"CS","phone":"0937688146","shifts":{"1":"14:30 ~ 22:30","2":"18:30 ~ 22:30","3":"14:30 ~ 22:30","4":"AL","5":"09:00 ~ 17:00","6":"13:00 ~ 17:00","7":"OFF","8":"07:30 ~ 15:30","9":"09:00 ~ 17:00","10":"14:30 ~ 22:30","11":"08:00 ~ 16:00","12":"14:30 ~ 22:30","13":"14:30 ~ 22:30","14":"OFF","15":"14:30 ~ 22:30","16":"AL-1/2","17":"14:30 ~ 22:30","18":"14:30 ~ 22:30","19":"10:30 ~ 18:30","20":"09:00 ~ 17:00","21":"09:00 ~ 17:00","22":"09:00 ~ 13:00","23":"OFF","24":"14:30 ~ 22:30","25":"08:00 ~ 16:00","26":"OFF","27":"14:30 ~ 22:30","28":"14:30 ~ 18:30","29":"18:30 ~ 22:30","30":"14:30 ~ 22:30","31":"14:30 ~ 22:30"}},
+{"name":"NGUYỄN NGỌC PHỤNG","pos":"Admin","phone":"0777702154","shifts":{"1":"09:00 ~ 16:00","2":"09:00 ~ 16:00","3":"08:00 ~ 15:00","4":"08:00 ~ 15:00","5":"OFF","6":"09:00 ~ 13:00","7":"09:00 ~ 16:00","8":"09:00 ~ 16:00","9":"09:00 ~ 16:00","10":"AL","11":"AL","12":"09:00 ~ 16:00","13":"08:30 ~ 16:30","14":"09:00 ~ 16:00","15":"09:00 ~ 16:00","16":"09:00 ~ 16:00","17":"OFF","18":"AL-1/2","19":"OFF","20":"AL-1/2","21":"AL","22":"09:00 ~ 16:00","23":"11:00 ~ 18:00","24":"08:00 ~ 15:00","25":"11:30 ~ 18:30","26":"OFF","27":"11:00 ~ 15:00","28":"09:00 ~ 17:00","29":"09:00 ~ 17:00","30":"09:00 ~ 17:00","31":"08:00 ~ 15:00"}},
+{"name":"TĂNG QUẾ NHI","pos":"Admin","phone":"0909989041","shifts":{"1":"OFF","2":"09:00 ~ 17:00","3":"14:30 ~ 22:30","4":"08:00 ~ 16:00","5":"OFF","6":"14:30 ~ 18:30","7":"14:30 ~ 22:30","8":"14:30 ~ 22:30","9":"14:30 ~ 22:30","10":"14:30 ~ 22:30","11":"14:30 ~ 22:30","12":"07:30 ~ 15:30","13":"AL-1/2","14":"OFF","15":"09:00 ~ 17:00","16":"14:30 ~ 22:30","17":"07:30 ~ 15:30","18":"07:30 ~ 15:30","19":"14:30 ~ 22:30","20":"14:30 ~ 22:30","21":"14:30 ~ 22:30","22":"18:30 ~ 22:30","23":"OFF","24":"14:30 ~ 22:30","25":"14:30 ~ 22:30","26":"07:30 ~ 15:30","27":"AL-1/2","28":"AL","29":"OFF","30":"09:00 ~ 17:00","31":"08:00 ~ 16:00"}},
+{"name":"PHAN THỊ CHÚC LINH","pos":"Admin","phone":"0972568403","shifts":{"1":"09:00 ~ 17:00","2":"09:00 ~ 13:00","3":"08:00 ~ 16:00","4":"14:30 ~ 22:30","5":"14:30 ~ 22:30","6":"14:30 ~ 22:30","7":"14:30 ~ 22:30","8":"14:30 ~ 22:30","9":"AL-1/2","10":"OFF","11":"14:30 ~ 22:30","12":"OFF","13":"07:30 ~ 11:30","14":"07:30 ~ 15:30","15":"07:30 ~ 15:30","16":"07:30 ~ 15:30","17":"08:00 ~ 16:00","18":"08:00 ~ 16:00","19":"14:30 ~ 22:30","20":"14:30 ~ 22:30","21":"14:30 ~ 22:30","22":"14:30 ~ 22:30","23":"14:30 ~ 22:30","24":"OFF","25":"18:30 ~ 22:30","26":"09:00 ~ 17:00","27":"07:30 ~ 11:30","28":"09:00 ~ 17:00","29":"09:00 ~ 17:00","30":"OFF","31":"AL"}},
+{"name":"LÊ UYÊN NHI","pos":"SC","phone":"0398694642","shifts":{"1":"09:00 ~ 17:00","2":"13:00 ~ 17:00","3":"08:00 ~ 16:00","4":"08:00 ~ 16:00","5":"14:30 ~ 22:30","6":"18:30 ~ 22:30","7":"OFF","8":"14:30 ~ 22:30","9":"14:30 ~ 22:30","10":"14:30 ~ 22:30","11":"14:30 ~ 22:30","12":"14:30 ~ 22:30","13":"13:00 ~ 17:00","14":"OFF","15":"09:00 ~ 17:00","16":"09:00 ~ 17:00","17":"08:00 ~ 16:00","18":"08:00 ~ 16:00","19":"18:30 ~ 22:30","20":"14:30 ~ 22:30","21":"OFF","22":"14:30 ~ 22:30","23":"14:30 ~ 22:30","24":"14:30 ~ 22:30","25":"14:30 ~ 22:30","26":"OFF","27":"09:00 ~ 17:00","28":"14:30 ~ 18:30","29":"09:00 ~ 17:00","30":"OFF","31":"08:00 ~ 16:00"}},
+{"name":"PHAN THỊ THÙY DƯƠNG","pos":"Cashier PT","phone":"","shifts":{"1":"OFF","2":"18:00 ~ 22:00","3":"15:00 ~ 22:00","4":"14:00 ~ 22:00","5":"OFF","6":"18:00 ~ 22:00","7":"OFF","8":"OFF","9":"18:00 ~ 22:00","10":"14:00 ~ 22:00","11":"14:00 ~ 22:00","12":"OFF","13":"18:00 ~ 22:00","14":"OFF","15":"OFF","16":"18:00 ~ 22:00","17":"14:00 ~ 22:00","18":"OFF","19":"OFF","20":"18:00 ~ 22:00","21":"OFF","22":"OFF","23":"OFF","24":"OFF","25":"OFF","26":"OFF","27":"18:00 ~ 22:00","28":"OFF","29":"OFF","30":"18:00 ~ 22:00","31":"14:00 ~ 22:00"}},
+{"name":"VÕ THANH THẢO","pos":"Cashier PT","phone":"0342744021","shifts":{"1":"OFF","2":"OFF","3":"OFF","4":"OFF","5":"OFF","6":"09:00 ~ 17:00","7":"OFF","8":"OFF","9":"OFF","10":"OFF","11":"OFF","12":"09:00 ~ 17:00","13":"09:00 ~ 17:00","14":"09:00 ~ 17:00","15":"OFF","16":"09:00 ~ 17:00","17":"OFF","18":"OFF","19":"09:00 ~ 17:00","20":"09:00 ~ 17:00","21":"14:30 ~ 18:30","22":"OFF","23":"09:00 ~ 16:00","24":"OFF","25":"OFF","26":"09:00 ~ 13:00","27":"09:00 ~ 17:00","28":"OFF","29":"OFF","30":"OFF","31":"OFF"}},
+{"name":"TRÌNH QUÁCH VY","pos":"Cashier PT","phone":"","shifts":{"1":"18:30 ~ 22:30","2":"OFF","3":"08:00 ~ 16:00","4":"08:00 ~ 16:00","5":"OFF","6":"OFF","7":"18:00 ~ 22:00","8":"OFF","9":"OFF","10":"08:00 ~ 16:00","11":"08:00 ~ 16:00","12":"OFF","13":"OFF","14":"OFF","15":"18:00 ~ 22:00","16":"OFF","17":"08:00 ~ 16:00","18":"08:00 ~ 16:00","19":"OFF","20":"OFF","21":"18:00 ~ 22:00","22":"OFF","23":"OFF","24":"09:00 ~ 17:00","25":"OFF","26":"OFF","27":"OFF","28":"OFF","29":"OFF","30":"OFF","31":"08:00 ~ 16:00"}},
+{"name":"NGUYỄN VIỆT HƯƠNG NHƯ","pos":"Cafe Pet","phone":"","shifts":{"1":"17:00 ~ 21:00","2":"14:30 ~ 22:30","3":"09:00 ~ 17:00","4":"14:30 ~ 22:30","5":"09:00 ~ 17:00","6":"10:30 ~ 18:30","7":"OFF","8":"14:30 ~ 18:30","9":"13:00 ~ 21:00","10":"08:00 ~ 16:00","11":"14:30 ~ 22:30","12":"OFF","13":"14:30 ~ 22:30","14":"14:30 ~ 22:30","15":"14:30 ~ 18:30","16":"14:30 ~ 22:30","17":"14:30 ~ 22:30","18":"14:30 ~ 22:30","19":"09:00 ~ 17:00","20":"OFF","21":"09:00 ~ 17:00","22":"14:30 ~ 18:30","23":"14:30 ~ 22:30","24":"08:00 ~ 16:00","25":"08:00 ~ 16:00","26":"14:30 ~ 22:30","27":"14:30 ~ 22:30","28":"14:30 ~ 22:30","29":"18:30 ~ 22:30","30":"OFF"}},
+{"name":"NGUYỄN NGỌC ĐÀI TRANG","pos":"Cafe Pet","phone":"","shifts":{"1":"14:30 ~ 22:30","2":"14:30 ~ 18:30","3":"AL","4":"14:30 ~ 22:30","7":"08:00 ~ 16:00","8":"OFF","9":"09:00 ~ 17:00","10":"08:00 ~ 16:00","11":"08:00 ~ 16:00","12":"OFF","13":"14:30 ~ 22:30","14":"14:30 ~ 22:30","15":"14:30 ~ 18:30","16":"09:00 ~ 17:00","17":"08:00 ~ 16:00","18":"14:30 ~ 22:30","19":"09:00 ~ 17:00","20":"UP-1/2","21":"OFF","22":"09:00 ~ 17:00","23":"09:00 ~ 17:00","24":"08:00 ~ 16:00","25":"07:30 ~ 15:30","26":"14:30 ~ 22:30","27":"14:30 ~ 22:30","28":"OFF","29":"14:30 ~ 22:30","30":"09:00 ~ 13:00"}},
+{"name":"LÊ QUỐC PHÚ","pos":"Sale Chief","phone":"0365013623","shifts":{"1":"09:00 ~ 17:00","2":"09:00 ~ 17:00","3":"06:00 ~ 14:00","4":"08:00 ~ 16:00","5":"14:30 ~ 22:30","6":"12:00 ~ 20:00","7":"OFF","8":"14:30 ~ 22:30","9":"14:30 ~ 22:30","10":"12:00 ~ 16:00","11":"14:30 ~ 22:30","12":"09:00 ~ 17:00","13":"09:00 ~ 17:00","14":"09:00 ~ 17:00","15":"OFF","16":"AL-1/2","17":"AL","18":"AL","19":"AL","20":"14:30 ~ 22:30","21":"14:30 ~ 22:30","22":"14:30 ~ 22:30","23":"10:00 ~ 18:00","24":"08:00 ~ 12:00","25":"OFF","26":"OFF","27":"09:00 ~ 17:00","28":"14:30 ~ 22:30","29":"09:00 ~ 17:00","30":"09:00 ~ 13:00","31":"08:00 ~ 16:00"}},
+{"name":"NGUYỄN QUỐC BẢO","pos":"Sale Senior","phone":"0339473200","shifts":{"1":"14:30 ~ 22:30","2":"18:30 ~ 22:30","3":"14:30 ~ 22:30","4":"14:30 ~ 22:30","5":"09:00 ~ 17:00","6":"OFF","7":"09:00 ~ 17:00","8":"09:00 ~ 17:00","9":"09:00 ~ 13:00","10":"08:00 ~ 16:00","11":"08:00 ~ 16:00","12":"14:30 ~ 22:30","13":"14:30 ~ 22:30","14":"OFF","15":"18:30 ~ 22:30","16":"14:30 ~ 22:30","17":"14:30 ~ 22:30","18":"14:30 ~ 22:30","19":"09:00 ~ 17:00","20":"OFF","21":"07:30 ~ 15:30","22":"14:30 ~ 22:30","23":"08:00 ~ 12:00","24":"14:30 ~ 22:30","25":"08:00 ~ 16:00","26":"09:00 ~ 17:00","27":"14:30 ~ 22:30","28":"14:30 ~ 22:30","29":"OFF","30":"AL-1/2","31":"AL"}},
+{"name":"NGUYỄN THỊ KIM NGÂN","pos":"Sale Staff","phone":"0346479449","shifts":{"1":"09:00 ~ 17:00","2":"09:00 ~ 17:00","3":"08:00 ~ 12:00","4":"OFF","5":"AL-1/2","6":"14:30 ~ 22:30","7":"14:30 ~ 22:30","8":"OFF","9":"14:30 ~ 22:30","10":"14:30 ~ 22:30","11":"14:30 ~ 22:30","12":"OFF","13":"09:00 ~ 17:00","14":"12:00 ~ 20:00","15":"09:00 ~ 17:00","16":"09:00 ~ 13:00","17":"08:00 ~ 16:00","18":"08:00 ~ 16:00","19":"14:30 ~ 22:30","20":"14:30 ~ 22:30","21":"OFF","22":"AL-1/2","23":"14:30 ~ 22:30","24":"14:30 ~ 22:30","25":"14:30 ~ 22:30","26":"OFF","27":"09:00 ~ 17:00","28":"09:00 ~ 17:00","29":"12:00 ~ 20:00","30":"12:00 ~ 20:00","31":"08:00 ~ 16:00"}},
+{"name":"NGUYỄN TƯỜNG VI","pos":"Sale Senior","phone":"0908274328","shifts":{"1":"14:30 ~ 22:30","2":"OFF","3":"14:30 ~ 22:30","4":"18:30 ~ 22:30","5":"09:00 ~ 17:00","6":"09:00 ~ 17:00","7":"09:00 ~ 13:00","8":"OFF","9":"09:00 ~ 17:00","10":"13:00 ~ 21:00","11":"08:00 ~ 16:00","12":"14:30 ~ 22:30","13":"14:30 ~ 22:30","14":"14:30 ~ 22:30","15":"OFF","16":"AL-1/2","17":"14:30 ~ 22:30","18":"14:30 ~ 22:30","19":"OFF","20":"09:00 ~ 17:00","21":"07:30 ~ 11:30","22":"09:00 ~ 17:00","23":"09:00 ~ 17:00","24":"08:00 ~ 16:00","25":"12:00 ~ 20:00","26":"14:30 ~ 22:30","27":"OFF","28":"AL-1/2","29":"14:30 ~ 22:30","30":"14:30 ~ 22:30","31":"14:30 ~ 22:30"}},
+{"name":"NGUYỄN DUY THANH","pos":"Sale Senior","phone":"0901442294","shifts":{"1":"OFF","2":"09:00 ~ 17:00","3":"08:00 ~ 16:00","4":"08:00 ~ 16:00","5":"14:30 ~ 22:30","6":"18:30 ~ 22:30","7":"OFF","8":"14:30 ~ 22:30","9":"14:30 ~ 22:30","10":"14:30 ~ 22:30","11":"14:30 ~ 22:30","12":"09:00 ~ 17:00","13":"OFF","14":"09:00 ~ 13:00","15":"09:00 ~ 17:00","16":"09:00 ~ 17:00","17":"12:00 ~ 20:00","18":"12:00 ~ 20:00","19":"14:30 ~ 22:30","20":"14:30 ~ 22:30","21":"14:30 ~ 22:30","22":"AL-1/2","23":"14:30 ~ 22:30","24":"OFF","25":"14:30 ~ 22:30","26":"09:00 ~ 17:00","27":"09:00 ~ 17:00","28":"OFF","29":"09:00 ~ 13:00","30":"09:00 ~ 17:00","31":"08:00 ~ 16:00"}},
+{"name":"TRẦN QUỲNH ANH","pos":"Sale Staff","phone":"0374822881","shifts":{"1":"14:30 ~ 22:30","2":"14:30 ~ 22:30","3":"14:30 ~ 22:30","4":"14:30 ~ 22:30","5":"OFF","6":"09:00 ~ 17:00","7":"09:00 ~ 17:00","8":"07:30 ~ 11:30","9":"09:00 ~ 17:00","10":"08:00 ~ 16:00","11":"08:00 ~ 16:00","12":"18:30 ~ 22:30","13":"14:30 ~ 22:30","14":"14:30 ~ 22:30","15":"14:30 ~ 22:30","16":"14:30 ~ 22:30","17":"08:00 ~ 16:00","18":"OFF","19":"09:00 ~ 17:00","20":"09:00 ~ 13:00","21":"09:00 ~ 17:00","22":"07:30 ~ 15:30","23":"OFF","24":"14:30 ~ 22:30","25":"08:00 ~ 16:00","26":"14:30 ~ 22:30","27":"14:30 ~ 22:30","28":"09:00 ~ 13:00","29":"OFF","30":"14:30 ~ 22:30","31":"14:30 ~ 22:30"}},
+{"name":"NGÔ VĂN KHÔI","pos":"Sale Senior","phone":"0707955326","shifts":{"1":"09:00 ~ 17:00","2":"09:00 ~ 13:00","3":"08:00 ~ 16:00","4":"08:00 ~ 16:00","5":"14:30 ~ 22:30","6":"14:30 ~ 22:30","7":"14:30 ~ 22:30","8":"14:30 ~ 22:30","9":"AL-1/2","10":"08:00 ~ 16:00","11":"OFF","12":"14:30 ~ 22:30","13":"09:00 ~ 17:00","14":"14:30 ~ 22:30","15":"09:00 ~ 13:00","16":"OFF","17":"08:00 ~ 16:00","18":"08:00 ~ 16:00","19":"14:30 ~ 22:30","20":"OFF","21":"14:30 ~ 22:30","22":"14:30 ~ 22:30","23":"18:30 ~ 22:30","24":"AL","25":"14:30 ~ 22:30","26":"09:00 ~ 17:00","27":"09:00 ~ 17:00","28":"09:00 ~ 13:00","29":"09:00 ~ 17:00","30":"09:00 ~ 17:00","31":"OFF"}},
+{"name":"HUỲNH THUẬN ĐÔNG","pos":"Sale Staff","phone":"0923046952","shifts":{"1":"OFF","2":"14:30 ~ 22:30","3":"14:30 ~ 22:30","4":"14:30 ~ 22:30","5":"09:00 ~ 17:00","6":"09:00 ~ 17:00","7":"09:00 ~ 17:00","8":"09:00 ~ 17:00","9":"09:00 ~ 13:00","10":"OFF","11":"AL","12":"AL","13":"AL-1/2","14":"OFF","15":"14:30 ~ 22:30","16":"14:30 ~ 22:30","17":"14:30 ~ 22:30","18":"14:30 ~ 22:30","19":"OFF","20":"09:00 ~ 17:00","21":"09:00 ~ 13:00","22":"09:00 ~ 17:00","23":"08:00 ~ 16:00","24":"08:00 ~ 16:00","25":"08:00 ~ 16:00","26":"14:30 ~ 22:30","27":"18:30 ~ 22:30","28":"14:30 ~ 22:30","29":"14:30 ~ 22:30","30":"OFF","31":"14:30 ~ 22:30"}},
+{"name":"ĐỖ THỊ HỒNG PHƯƠNG","pos":"Sale Senior","phone":"0707756808","shifts":{"1":"09:00 ~ 17:00","2":"OFF","3":"06:00 ~ 14:00","4":"08:00 ~ 12:00","5":"14:30 ~ 22:30","6":"14:30 ~ 22:30","7":"14:30 ~ 22:30","8":"18:30 ~ 22:30","9":"OFF","10":"14:30 ~ 22:30","11":"14:30 ~ 22:30","12":"09:00 ~ 17:00","13":"09:00 ~ 17:00","14":"09:00 ~ 17:00","15":"12:00 ~ 16:00","16":"09:00 ~ 17:00","17":"OFF","18":"08:00 ~ 16:00","19":"09:00 ~ 17:00","20":"09:00 ~ 17:00","21":"OFF","22":"AL-1/2","23":"AL","24":"AL","25":"AL","26":"AL","27":"AL","28":"AL-1/2","29":"OFF","30":"14:30 ~ 22:30","31":"14:30 ~ 22:30"}}
+];
 
-function pad2(n){ return String(n).padStart(2,"0"); }
-// Robust, deterministic Excel-serial-number → ISO date conversion (SheetJS's own published
-// algorithm). We deliberately do NOT rely on the library's automatic "cellDates" Date-object
-// construction, because whether a given cell is recognized as a date depends on that cell's
-// number-format metadata — and formula cells (e.g. a header cell containing "=E3") can carry
-// different formatting than the literal date cell they reference, causing some date columns to
-// be silently mis-typed. Reading the raw numeric serial and converting it ourselves sidesteps
-// that entirely and always gives the exact date written in the spreadsheet.
-function excelSerialToIso(serial){
-  const utcDays = Math.floor(serial - 25569);
-  const d = new Date(utcDays * 86400 * 1000);
-  return `${d.getUTCFullYear()}-${pad2(d.getUTCMonth()+1)}-${pad2(d.getUTCDate())}`;
-}
-function looksLikeDateSerial(v){
-  // Excel date serials for any real-world roster date comfortably fall in this range
-  // (roughly the years 2000–2100). Guards against stray numeric shift-codes etc.
-  return typeof v === "number" && v > 36526 && v < 73415;
-}
-// "Today" must reflect the user's real wall-clock date, so this one intentionally uses LOCAL getters.
-function todayIso(){
-  const d = new Date();
-  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
-}
+/* ===== UTILS ===== */
+const $ = s => document.querySelector(s);
+const WD = ["Chủ Nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"];
+const MN = ["Tháng 1","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"];
+function pad2(n){return String(n).padStart(2,"0");}
+function todayIso(){const d=new Date();return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function looksLikeDateSerial(v){return typeof v==="number"&&v>36526&&v<73415;}
+function excelSerialToIso(s){const d=new Date(Math.floor(s-25569)*86400000);return`${d.getUTCFullYear()}-${pad2(d.getUTCMonth()+1)}-${pad2(d.getUTCDate())}`;}
 
+/* ===== SHIFT CLASSIFY ===== */
 function classifyShift(raw){
-  const s = String(raw||"").trim();
-  const upper = s.toUpperCase();
-  const m = s.match(/(\d{1,2}):(\d{2})\s*[~\-]\s*(\d{1,2}):(\d{2})/);
+  const s=String(raw||"").trim(), u=s.toUpperCase();
+  const m=s.match(/(\d{1,2}):(\d{2})\s*[~\-]\s*(\d{1,2}):(\d{2})/);
   if(m){
-    const startH = parseInt(m[1],10) + parseInt(m[2],10)/60;
-    const endHraw = parseInt(m[3],10) + parseInt(m[4],10)/60;
-    const overnight = endHraw <= startH;
-    const endH = overnight ? endHraw + 24 : endHraw;
-    let bucket = "day";
-    if(startH < 6.5 || overnight) bucket = "night";
-    else if(startH >= 13.5) bucket = "evening";
-    return {kind:"shift", label:s, startH, endH, overnight, bucket};
+    const sh=parseInt(m[1])+parseInt(m[2])/60;
+    const eh0=parseInt(m[3])+parseInt(m[4])/60;
+    const over=eh0<=sh, eh=over?eh0+24:eh0;
+    let bk="day"; if(sh<6.5||over) bk="night"; else if(sh>=13.5) bk="evening";
+    return{kind:"shift",label:s,startH:sh,endH:eh,overnight:over,bucket:bk};
   }
-  if(upper.includes("OFF")) return {kind:"off", label:"OFF"};
-  if(upper.startsWith("AL") || upper.includes("NGHỈ PHÉP")) return {kind:"leave", label:s||"AL"};
-  if(upper === "PH") return {kind:"leave", label:"Lễ (PH)"};
-  if(upper === "UP") return {kind:"swap", label:"UP"};
-  if(upper === "WO") return {kind:"off", label:"WO"};
-  return {kind:"note", label:s};
+  if(u.includes("OFF")||u==="WO") return{kind:"off",label:s||"OFF"};
+  if(u.startsWith("AL")||u.includes("NGHỈ PHÉP")) return{kind:"leave",label:s||"AL"};
+  if(u==="PH") return{kind:"leave",label:"Lễ (PH)"};
+  if(u.startsWith("SL")) return{kind:"sick",label:s};
+  if(u.startsWith("UP")) return{kind:"swap",label:s};
+  return{kind:"note",label:s};
 }
-const BUCKET_META = {
-  night:{color:"var(--night)",soft:"var(--night-soft)",icon:"🌙",name:"Ca đêm"},
+const BK={
+  night:{color:"var(--night)",soft:"var(--night-soft,#e4e4fa)",icon:"🌙",name:"Ca đêm"},
   day:{color:"var(--ok)",soft:"var(--ok-soft)",icon:"☀️",name:"Ca sáng"},
-  evening:{color:"var(--safety)",soft:"var(--safety-soft)",icon:"🌇",name:"Ca chiều/tối"},
+  evening:{color:"var(--kred)",soft:"var(--kred-soft)",icon:"🌇",name:"Ca chiều"},
 };
-// Quản lý cửa hàng (SM) - không thuộc Team Admin hay Team Sale. Nhận diện theo chức danh, hoặc theo tên.
-const SM_NAMES = ["nguyen hoang dung"];
-function teamOf(position, name){
-  const p = String(position||"").trim();
-  if(/^(sm|store manager)\b/i.test(p)) return "SM";
-  if(name && SM_NAMES.includes(normName(name))) return "SM";
-  return /sale/i.test(p) ? "SALES" : "ADMIN";
+const SM_NAMES=["nguyen hoang dung"];
+function normName(s){return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/đ/gi,"d").toLowerCase().replace(/\s+/g," ").trim();}
+function teamOf(pos,name){
+  if(/^(sm|store manager)\b/i.test(pos)) return "SM";
+  if(name&&SM_NAMES.includes(normName(name))) return "SM";
+  if(/sale/i.test(pos)) return "SALES";
+  return "ADMIN";
 }
-function nowDecimalHours(){
-  const d = new Date();
-  return d.getHours() + d.getMinutes()/60;
-}
-function isShiftActiveNow(c){
-  if(selectedDate !== todayIso()) return false;
-  const h = nowDecimalHours();
-  if(c.overnight) return h >= c.startH || h < (c.endH - 24);
-  return h >= c.startH && h < c.endH;
-}
-function shortShiftBadge(c){
-  const dur = c.endH - c.startH;
-  return dur > 0 && dur < 7.5 ? `<span class="short-badge">${Math.round(dur)}h</span>` : "";
+function nowH(){const d=new Date();return d.getHours()+d.getMinutes()/60;}
+function isActiveNow(c,iso){if(iso!==todayIso()) return false;const h=nowH();return c.overnight?(h>=c.startH||h<c.endH-24):(h>=c.startH&&h<c.endH);}
+function shortBadge(c){const dur=c.endH-c.startH;return dur>0&&dur<7.5?`<span class="short-b">${Math.round(dur)}h</span>`:""; }
+function formatPhone(raw){let d=String(raw||"").replace(/\D/g,"");if(d.length===9)d="0"+d;return/^0\d{9}$/.test(d)?d:null;}
+
+/* ===== STATE ===== */
+const SCHEMA_V=8;
+let scheduleData=null, fileMeta=null, selectedDate=null, searchTerm="", tasksStore={};
+
+/* ===== SCHEDULE DATA from built-in ===== */
+function buildBuiltinData(){
+  const dates={};
+  BUILTIN_STAFF.forEach(emp=>{
+    Object.entries(emp.shifts).forEach(([day,raw])=>{
+      const iso=`${BUILTIN_MONTH}-${pad2(parseInt(day))}`;
+      if(!dates[iso]) dates[iso]=[];
+      dates[iso].push({name:emp.name,pos:emp.pos,phone:emp.phone,raw});
+    });
+  });
+  const notes={};
+  Object.entries(BUILTIN_NOTES).forEach(([day,txt])=>{
+    notes[`${BUILTIN_MONTH}-${pad2(parseInt(day))}`]=txt;
+  });
+  return{dates,notes,budget:{},sheetsUsed:1,sheetCount:1,hasPhoneBook:true,fileName:"Dữ liệu nhúng T10/2026"};
 }
 
-/* ============================================================ Shift-file parser */
-function parsePhoneBook(workbook){
-  // Look across all sheets for one that has an employee-code column and a phone-number column.
-  // Only the phone number is extracted — other personal fields in that sheet (ID numbers,
-  // birthdate, address, emergency contact) are intentionally never read.
-  const phoneMap = {};
-  workbook.SheetNames.forEach(sheetName=>{
-    const ws = workbook.Sheets[sheetName];
-    const aoa = XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:null});
-    if(!aoa || aoa.length < 2) return;
-    let headerIdx = -1, header = null;
-    for(let r=0;r<Math.min(aoa.length,5);r++){
-      const row = aoa[r]; if(!row) continue;
-      const lower = row.map(h=>String(h||"").toLowerCase());
-      const hasCode = lower.some(h=>h.includes("mã nhân viên") || h.includes("ee code") || h.includes("employee code"));
-      const hasPhone = lower.some(h=>h.includes("điện thoại") || h.includes("phone"));
-      if(hasCode && hasPhone){ headerIdx = r; header = lower; break; }
-    }
-    if(headerIdx===-1) return;
-    const codeCol = header.findIndex(h=>h.includes("mã nhân viên") || h.includes("ee code") || h.includes("employee code"));
-    // Prefer a column literally named "số điện thoại" over "số điện thoại người thân" (emergency contact).
-    let phoneCol = header.findIndex(h=>h.includes("điện thoại") && !h.includes("người thân") && !h.includes("khẩn cấp"));
-    if(phoneCol===-1) phoneCol = header.findIndex(h=>h.includes("điện thoại") || h.includes("phone"));
-    if(codeCol===-1 || phoneCol===-1) return;
-    for(let r=headerIdx+1;r<aoa.length;r++){
-      const row = aoa[r]; if(!row) continue;
-      const code = row[codeCol];
-      const phone = row[phoneCol];
-      if(code===null||code===undefined||code==="") continue;
-      if(phone===null||phone===undefined||phone==="") continue;
-      phoneMap[String(code).trim()] = String(phone).trim();
+/* ===== EXCEL PARSER ===== */
+function parseWorkbook(wb){
+  const dates={}, notes={};
+  let sheetsUsed=0;
+  const phoneMap={};
+  // try to get phone book
+  wb.SheetNames.forEach(sn=>{
+    const ws=wb.Sheets[sn];
+    const aoa=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null});
+    if(!aoa||aoa.length<2) return;
+    const h=(aoa[0]||[]).map(c=>String(c||"").toLowerCase());
+    const hasCode=h.some(x=>x.includes("mã nhân viên")||x.includes("ee code"));
+    const hasPhone=h.some(x=>x.includes("điện thoại")&&!x.includes("người thân"));
+    if(!hasCode||!hasPhone) return;
+    const codeC=h.findIndex(x=>x.includes("mã nhân viên")||x.includes("ee code"));
+    const phoneC=h.findIndex(x=>x.includes("điện thoại")&&!x.includes("người thân"));
+    const nameC=h.findIndex(x=>x.includes("tên"));
+    for(let r=1;r<aoa.length;r++){
+      const row=aoa[r];if(!row) continue;
+      const code=row[codeC], phone=row[phoneC], name=nameC>=0?row[nameC]:null;
+      if(!code||!phone) continue;
+      let digits=String(typeof phone==="number"?Math.round(phone):phone).replace(/\D/g,"");
+      if(digits.length===9) digits="0"+digits;
+      if(/^0\d{9}$/.test(digits)){
+        if(code) phoneMap[String(Math.round(Number(code)))||String(code)]=digits;
+        if(name) phoneMap[normName(String(name))]=digits;
+      }
     }
   });
-  return phoneMap;
-}
-function formatPhone(raw){
-  // Excel often strips the leading 0 from a Vietnamese mobile number when it's stored as a
-  // number. Re-add it so the number is dialable.
-  let digits = String(raw||"").replace(/\D/g,"");
-  if(digits.length===9) digits = "0"+digits;
-  if(!/^0\d{9}$/.test(digits)) return null;
-  return digits;
-}
-function phoneActionsHtml(phone){
-  const tel = "+84"+phone.slice(1);
-  return `<div class="phone-pop" data-pop="1">
-    <a href="tel:${tel}">📞 Gọi điện — ${phone}</a>
-    <a href="https://zalo.me/${phone}" target="_blank" rel="noopener">💬 Nhắn Zalo</a>
-  </div>`;
-}
-
-function parseBudget(workbook){
-  // Layout: repeating 5-column blocks [date, date-dup, pre-tax total, post-tax total, spacer],
-  // one block per month, side by side. We detect blocks by scanning for columns where most
-  // cells (down the sheet) look like date serials, rather than assuming fixed positions —
-  // robust to the sheet being reordered or resized.
-  const budget = {};
-  const sheetName = workbook.SheetNames.find(n => /budget/i.test(n));
-  if(!sheetName) return budget;
-  const ws = workbook.Sheets[sheetName];
-  const aoa = XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:null});
-  const numCols = aoa.reduce((m,row)=>Math.max(m, row?row.length:0), 0);
-  let c = 0;
-  while(c < numCols){
-    const dateRows = [];
-    for(let r=0;r<aoa.length;r++){
-      const row = aoa[r]; if(!row) continue;
-      if(looksLikeDateSerial(row[c])) dateRows.push(r);
-    }
-    if(dateRows.length >= 15){
-      dateRows.forEach(r=>{
-        const row = aoa[r];
-        const pre = row[c+2], post = row[c+3];
-        if(typeof pre==="number" || typeof post==="number"){
-          const iso = excelSerialToIso(row[c]);
-          budget[iso] = {pre: typeof pre==="number"?pre:null, post: typeof post==="number"?post:null};
-        }
-      });
-      c += 5;
-    } else {
-      c += 1;
-    }
-  }
-  return budget;
-}
-
-function parseWorkbook(workbook){
-  const dates = {};
-  const notes = {}; // iso -> note text
-  let sheetsUsed = 0;
-  const phoneMap = parsePhoneBook(workbook);
-  const budget = parseBudget(workbook);
-  workbook.SheetNames.forEach(sheetName=>{
-    const ws = workbook.Sheets[sheetName];
-    const aoa = XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:null});
-    if(!aoa || aoa.length < 3) return;
-    let dateRowIdx=-1, maxCount=0;
-    const scanLimit = Math.min(aoa.length, 20);
-    for(let r=0;r<scanLimit;r++){
-      const row = aoa[r]; if(!row) continue;
+  wb.SheetNames.forEach(sn=>{
+    const ws=wb.Sheets[sn];
+    const aoa=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null});
+    if(!aoa||aoa.length<3) return;
+    let drIdx=-1, maxCnt=0;
+    for(let r=0;r<Math.min(aoa.length,20);r++){
+      const row=aoa[r];if(!row) continue;
       let cnt=0;
-      for(let c=4;c<row.length;c++){ if(looksLikeDateSerial(row[c])) cnt++; }
-      if(cnt>maxCount){ maxCount=cnt; dateRowIdx=r; }
+      for(let c=4;c<row.length;c++) if(looksLikeDateSerial(row[c])) cnt++;
+      if(cnt>maxCnt){maxCnt=cnt;drIdx=r;}
     }
-    if(dateRowIdx===-1 || maxCount<5) return;
-    const dateRow = aoa[dateRowIdx];
-    const colDateMap = {};
-    for(let c=4;c<dateRow.length;c++){ if(looksLikeDateSerial(dateRow[c])) colDateMap[c]=excelSerialToIso(dateRow[c]); }
-    // The row directly above the date header typically carries free-text day notes
-    // (e.g. "CHẠY SẢNH", "NGÀY GIẢM 5%"), aligned to the same columns as the dates.
-    const notesRowIdx = dateRowIdx - 1;
-    if(notesRowIdx >= 0){
-      const notesRow = aoa[notesRowIdx];
-      Object.entries(colDateMap).forEach(([cKey, iso])=>{
-        const c = Number(cKey);
-        const val = notesRow[c];
-        if(typeof val === "string" && val.trim()) notes[iso] = val.trim().replace(/\n+/g," · ");
-      });
+    if(drIdx===-1||maxCnt<5) return;
+    const dr=aoa[drIdx], cdm={};
+    for(let c=4;c<dr.length;c++) if(looksLikeDateSerial(dr[c])) cdm[c]=excelSerialToIso(dr[c]);
+    if(drIdx>0){
+      const nr=aoa[drIdx-1];
+      Object.entries(cdm).forEach(([c,iso])=>{const v=nr[c];if(v&&String(v).trim()) notes[iso]=String(v).trim().replace(/\n/g," · ");});
     }
     let saw=false;
-    for(let r=dateRowIdx+1;r<aoa.length;r++){
-      const row = aoa[r]; if(!row) continue;
-      const no=row[0], code=row[1], name=row[2], position=row[3];
-      if(typeof name !== "string" || !name.trim()) continue;
-      const upperName = name.trim().toUpperCase();
-      if(["ADMIN","SALES","SC","TOTAL"].includes(upperName)) continue;
-      if(typeof no !== "number") continue;
+    for(let r=drIdx+1;r<aoa.length;r++){
+      const row=aoa[r];if(!row) continue;
+      const name=row[2], pos=row[3], code=row[1];
+      if(!name||!String(name).trim()) continue;
+      if(["ADMIN","SALES","SC","TOTAL","SM","CAFE PET","CS & SC"].includes(String(name).trim().toUpperCase())) continue;
+      if(typeof row[0]!=="number") continue;
       saw=true;
-      Object.entries(colDateMap).forEach(([cKey, iso])=>{
-        const c = Number(cKey);
-        const val = row[c];
-        if(val===null||val===undefined||val==="") return;
-        const raw = String(val).trim();
+      const codeStr=code?String(Math.round(Number(code))||code).trim():"";
+      const phone=phoneMap[codeStr]||phoneMap[normName(String(name))]||"";
+      Object.entries(cdm).forEach(([c,iso])=>{
+        const v=row[c];if(v===null||v===undefined||v==="") return;
         if(!dates[iso]) dates[iso]=[];
-        const key = code+"__"+name;
-        // Boundary dates can appear in two adjacent month-sheets. Prefer the later sheet
-        // (processed later in workbook order) since it's more likely to hold the final,
-        // updated version rather than an earlier draft/spillover copy.
-        const existingIdx = dates[iso].findIndex(e=>e._key===key);
-        const rec = {no, code, name:name.trim(), position:position||"", raw, _key:key, _sheet:sheetName, phone: phoneMap[String(code).trim()] || null};
-        if(existingIdx===-1) dates[iso].push(rec);
-        else dates[iso][existingIdx] = rec;
+        const raw=String(v).trim();
+        const key=String(code)+"__"+String(name);
+        const ei=dates[iso].findIndex(e=>e._key===key);
+        const rec={name:String(name).trim(),pos:String(pos||"").trim(),raw,phone,_key:key};
+        if(ei===-1) dates[iso].push(rec); else dates[iso][ei]=rec;
       });
     }
     if(saw) sheetsUsed++;
   });
-  return {dates, sheetsUsed, sheetCount: workbook.SheetNames.length, hasPhoneBook: Object.keys(phoneMap).length>0, notes, budget};
+  return{dates,notes,budget:{},sheetsUsed,sheetCount:wb.SheetNames.length,hasPhoneBook:Object.keys(phoneMap).length>0};
 }
 
-/* ============================================================ State */
-/* Bump this whenever the parsing/date logic changes, so old cached results (parsed with a
-   previous, possibly buggy, version of this code) are never silently reused. */
-const SCHEMA_VERSION = 7;
-
-let scheduleData = null; // {dates, sheetsUsed, sheetCount}
-let fileMeta = null;
-let selectedDate = null;
-let searchTerm = "";
-let tasksStore = {}; // dateIso -> [{id,title,assignee,done}]
-let staleDataCleared = false;
-let dateMismatchNotice = null;
-
-/* ============================================================ Persistence (localStorage — real standalone browser) */
-function safeLS(){ try{ return window.localStorage; }catch(e){ return null; } }
+/* ===== PERSISTENCE ===== */
+function safeLS(){try{return window.localStorage;}catch(e){return null;}}
 function loadPersisted(){
-  const ls = safeLS(); if(!ls) return;
+  const ls=safeLS();if(!ls) return;
   try{
-    const raw = ls.getItem("kb-schedule-data");
-    if(raw){
-      const parsed = JSON.parse(raw);
-      if(parsed.version === SCHEMA_VERSION){
-        scheduleData = parsed.data;
-        fileMeta = {name: parsed.fileName, updatedAt: parsed.updatedAt};
-      } else {
-        // Stale data from an older (buggy) version of this dashboard — drop it and ask for a fresh upload.
-        ls.removeItem("kb-schedule-data");
-        staleDataCleared = true;
-      }
-    }
+    const raw=ls.getItem("khn16-sched");
+    if(raw){const p=JSON.parse(raw);if(p.v===SCHEMA_V){scheduleData=p.data;fileMeta={name:p.fn,updatedAt:p.at};}}
   }catch(e){}
-  try{
-    const rawT = ls.getItem("kb-tasks-data");
-    if(rawT) tasksStore = JSON.parse(rawT);
-  }catch(e){}
+  try{const rt=ls.getItem("khn16-tasks");if(rt) tasksStore=JSON.parse(rt);}catch(e){}
 }
-function persistSchedule(){
-  const ls = safeLS(); if(!ls || !scheduleData) return;
-  try{ ls.setItem("kb-schedule-data", JSON.stringify({data:scheduleData, fileName:fileMeta.name, updatedAt:fileMeta.updatedAt, version:SCHEMA_VERSION})); }catch(e){}
-}
-function persistTasks(){
-  const ls = safeLS(); if(!ls) return;
-  try{ ls.setItem("kb-tasks-data", JSON.stringify(tasksStore)); }catch(e){}
-}
+function persistSchedule(){const ls=safeLS();if(!ls||!scheduleData) return;try{ls.setItem("khn16-sched",JSON.stringify({data:scheduleData,fn:fileMeta.name,at:fileMeta.updatedAt,v:SCHEMA_V}));}catch(e){}}
+function persistTasks(){const ls=safeLS();if(!ls) return;try{ls.setItem("khn16-tasks",JSON.stringify(tasksStore));}catch(e){}}
 
-/* ============================================================ Rendering */
-function renderMeta(){
-  const el = $("#scheduleMeta");
-  if(!fileMeta){ el.innerHTML = ""; return; }
-  const phoneNote = scheduleData.hasPhoneBook
-    ? `<span>·</span><span>📞 đã tìm thấy số điện thoại nhân viên</span>`
-    : `<span>·</span><span>File không có sheet số điện thoại — nút gọi/Zalo sẽ ẩn</span>`;
-  el.innerHTML = `<span>Nguồn: ${escapeHtml(fileMeta.name)}</span><span>·</span><span>Cập nhật: ${new Date(fileMeta.updatedAt).toLocaleString("vi-VN")}</span><span>·</span><span>${scheduleData.sheetsUsed}/${scheduleData.sheetCount} bảng tháng đã đọc được</span>${phoneNote}`;
+/* ===== AVAILABLE DATES ===== */
+function availDates(){return scheduleData?Object.keys(scheduleData.dates).sort():[];}
+function pickDefault(){
+  const all=availDates(); if(!all.length) return;
+  const t=todayIso();
+  selectedDate=all.includes(t)?t:all[all.length-1];
 }
+function formatVi(iso){const d=new Date(iso+"T00:00:00");return`${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()}`;}
+function formatVnd(n){return typeof n==="number"?new Intl.NumberFormat("vi-VN").format(Math.round(n))+"đ":"—";}
 
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
-
-function availableDates(){ return scheduleData ? Object.keys(scheduleData.dates).sort() : []; }
-
-function pickDefaultDate(){
-  const all = availableDates();
-  if(all.length===0) return;
-  const t = todayIso();
-  if(all.includes(t)){
-    selectedDate = t;
-    dateMismatchNotice = null;
-  }else{
-    selectedDate = all[all.length-1];
-    dateMismatchNotice = `Hôm nay thực tế là ${formatVi(t)}, nhưng file lịch này chỉ có dữ liệu từ ${formatVi(all[0])} đến ${formatVi(all[all.length-1])} — không có ngày hôm nay trong file. Đang hiển thị ngày gần nhất có dữ liệu (${formatVi(selectedDate)}). Đây không phải lỗi hiển thị — hãy tải lên đúng file lịch của tháng hiện tại để xem chính xác hôm nay.`;
-  }
-}
-function formatVi(iso){
-  const d = new Date(iso+"T00:00:00");
-  return `${pad2(d.getDate())}/${pad2(d.getMonth()+1)}/${d.getFullYear()}`;
-}
-
-// Fixed-date national holidays only (don't shift year to year). Tết and other lunar-calendar
-// holidays (Giỗ Tổ Hùng Vương, etc.) change every year — add them here manually if needed,
-// since there's no reliable way to compute the lunar calendar from code alone.
-const FIXED_HOLIDAYS = {
-  "01-01": "Tết Dương lịch",
-  "04-30": "Giải phóng miền Nam",
-  "05-01": "Quốc tế Lao động",
-  "09-02": "Quốc khánh",
-};
-// Lunar-calendar holidays whose solar date changes every year, so these are recorded as exact
-// dates (not recurring mm-dd) for the specific years given.
-const LUNAR_HOLIDAYS = {
-  "2027-02-05": "Tết Nguyên Đán",
-  "2027-02-06": "Tết Nguyên Đán",
-  "2027-02-07": "Tết Nguyên Đán",
-  "2027-02-08": "Tết Nguyên Đán",
-  "2027-02-09": "Tết Nguyên Đán",
-  "2027-04-16": "Giỗ Tổ Hùng Vương",
-};
-function specialDayTags(iso){
-  const d = new Date(iso+"T00:00:00");
-  const tags = [];
-  const dow = d.getDay();
-  if(dow===0 || dow===6) tags.push({cls:"weekend", label:"Cuối tuần"});
-  const day = d.getDate();
-  if(day===5 || day===20) tags.push({cls:"mid", label:`Ngày ${day}`});
-  const mmdd = `${pad2(d.getMonth()+1)}-${pad2(day)}`;
-  if(FIXED_HOLIDAYS[mmdd]) tags.push({cls:"holiday", label:FIXED_HOLIDAYS[mmdd]});
-  if(LUNAR_HOLIDAYS[iso]) tags.push({cls:"holiday", label:LUNAR_HOLIDAYS[iso]});
+const FIXED_HOL={"01-01":"Tết Dương lịch","04-30":"Giải phóng miền Nam","05-01":"Quốc tế Lao động","09-02":"Quốc khánh"};
+function dayTags(iso){
+  const d=new Date(iso+"T00:00:00"),tags=[],dow=d.getDay(),day=d.getDate();
+  if(dow===0||dow===6) tags.push({cls:"weekend",label:"Cuối tuần"});
+  if(day===5||day===20) tags.push({cls:"mid",label:`Ngày ${day}`});
+  const mmdd=`${pad2(d.getMonth()+1)}-${pad2(day)}`;
+  if(FIXED_HOL[mmdd]) tags.push({cls:"holiday",label:FIXED_HOL[mmdd]});
   return tags;
 }
-function formatVnd(n){
-  if(typeof n !== "number") return "—";
-  return new Intl.NumberFormat("vi-VN").format(Math.round(n)) + "đ";
-}
 
-function dayRecords(){
-  if(!scheduleData || !selectedDate) return [];
-  let recs = scheduleData.dates[selectedDate] || [];
-  if(searchTerm.trim()){
-    const q = searchTerm.trim().toLowerCase();
-    recs = recs.filter(r=>r.name.toLowerCase().includes(q));
-  }
-  return recs.slice().sort((a,b)=>(a.no||0)-(b.no||0));
-}
-
-function renderAll(){
-  renderMeta();
-  if(!scheduleData){
-    $("#scheduleUploadZone").style.display = "";
-    $("#scheduleApp").style.display = "none";
-    $("#targetStrip").style.display = "none";
-    $("#noteBanner").innerHTML = "";
-    renderHeroFallback();
-  }else{
-    $("#scheduleUploadZone").style.display = "none";
-    $("#scheduleApp").style.display = "";
-    renderControls();
-    renderTargetStrip();
-    renderNoteBanner();
-    renderStats();
-    renderPush();
-    renderTeams();
-  }
-  renderTaskAssigneeOptions();
-  renderTasks();
-}
-
-function renderHeroFallback(){
-  const iso = todayIso();
-  const d = new Date(iso+"T00:00:00");
-  $("#heroDayNum").textContent = pad2(d.getDate());
-  $("#heroMonthYear").textContent = `Tháng ${d.getMonth()+1}, ${d.getFullYear()}`;
-  $("#heroWeekday").textContent = WEEKDAYS_VI[d.getDay()];
-  $("#heroWhen").textContent = "hôm nay";
-  const tags = specialDayTags(iso);
-  $("#heroBadges").innerHTML = tags.map(t=>`<span class="day-badge ${t.cls}">${escapeHtml(t.label)}</span>`).join("");
+/* ===== RENDER ===== */
+function renderMeta(){
+  const el=$("#metaBar"); if(!fileMeta){el.innerHTML="";return;}
+  el.innerHTML=`<span>Nguồn: <b>${esc(fileMeta.name)}</b></span><span class="dot">·</span><span>Cập nhật: ${new Date(fileMeta.updatedAt).toLocaleString("vi-VN")}</span><span class="dot">·</span><span>${scheduleData.sheetsUsed}/${scheduleData.sheetCount} sheet đọc được</span>`;
 }
 
 function renderControls(){
-  const all = availableDates();
-  const min = all[0], max = all[all.length-1];
-  $("#prevDay").disabled = selectedDate === min;
-  $("#nextDay").disabled = selectedDate === max;
-  $("#datePicker").min = min; $("#datePicker").max = max;
-  $("#datePicker").value = selectedDate || "";
-  const d = selectedDate ? new Date(selectedDate+"T00:00:00") : null;
-  $("#dateLabel").textContent = d ? `${WEEKDAYS_VI[d.getDay()]}, ${d.getDate()} ${MONTHS_VI[d.getMonth()]} ${d.getFullYear()}` : "—";
+  const all=availDates(); const mn=all[0],mx=all[all.length-1];
+  $("#prevDay").disabled=selectedDate===mn; $("#nextDay").disabled=selectedDate===mx;
+  $("#datePicker").min=mn; $("#datePicker").max=mx; $("#datePicker").value=selectedDate||"";
+  const d=selectedDate?new Date(selectedDate+"T00:00:00"):null;
   if(d){
-    $("#heroDayNum").textContent = pad2(d.getDate());
-    $("#heroMonthYear").textContent = `Tháng ${d.getMonth()+1}, ${d.getFullYear()}`;
-    $("#heroWeekday").textContent = WEEKDAYS_VI[d.getDay()];
-    $("#heroWhen").textContent = selectedDate === todayIso() ? "hôm nay" : "";
-    const tags = specialDayTags(selectedDate);
-    $("#heroBadges").innerHTML = tags.map(t=>`<span class="day-badge ${t.cls}">${escapeHtml(t.label)}</span>`).join("");
+    $("#dateLabel").textContent=`${WD[d.getDay()]}, ${d.getDate()} ${MN[d.getMonth()]} ${d.getFullYear()}`;
+    $("#dayNum").textContent=pad2(d.getDate());
+    $("#dayWeekday").textContent=WD[d.getDay()];
+    $("#dayMonthYr").textContent=`${MN[d.getMonth()]} ${d.getFullYear()}`;
+    const tags=dayTags(selectedDate);
+    $("#dayBadges").innerHTML=tags.map(t=>`<span class="day-badge ${t.cls}">${esc(t.label)}</span>`).join("");
   }
 }
 
-function renderTargetStrip(){
-  const el = $("#targetStrip");
-  const b = scheduleData && scheduleData.budget ? scheduleData.budget[selectedDate] : null;
-  if(!b || (b.pre==null && b.post==null)){ el.style.display = "none"; el.innerHTML=""; return; }
-  el.style.display = "";
-  el.innerHTML = `
-    <div class="target-card pretax">
-      <div class="lbl">Target chưa thuế</div>
-      <div class="val disp">${formatVnd(b.pre)}</div>
-    </div>
-    <div class="target-card posttax">
-      <div class="lbl">Target có thuế (VAT)</div>
-      <div class="val disp">${formatVnd(b.post)}</div>
-    </div>`;
-}
-
-function renderNoteBanner(){
-  const el = $("#noteBanner");
-  const note = scheduleData && scheduleData.notes ? scheduleData.notes[selectedDate] : null;
-  if(!note){ el.innerHTML = ""; return; }
-  el.innerHTML = `<div class="note-banner"><span class="ic">📌</span><div><b>Ghi chú ngày này:</b> ${escapeHtml(note)}</div></div>`;
+function renderNote(){
+  const el=$("#noteBanner");
+  const note=scheduleData&&scheduleData.notes?scheduleData.notes[selectedDate]:null;
+  el.innerHTML=note?`<div class="note-banner">📌 <div><b>Hôm nay:</b> ${esc(note)}</div></div>`:"";
 }
 
 function renderStats(){
-  const recs = selectedDate && scheduleData ? (scheduleData.dates[selectedDate]||[]) : [];
-  const s = {total:recs.length, night:0, day:0, evening:0, off:0, leave:0, other:0};
-  recs.forEach(r=>{
-    const c = classifyShift(r.raw);
-    if(c.kind==="shift") s[c.bucket]++;
-    else if(c.kind==="off") s.off++;
-    else if(c.kind==="leave") s.leave++;
-    else s.other++;
-  });
-  const cards = [
-    ["Ca sáng", s.day, "var(--ok)"],
-    ["Ca chiều/tối", s.evening, "var(--safety)"],
-  ];
-  if(s.night>0) cards.push(["Ca đêm", s.night, "var(--night)"]);
-  cards.push(["Nghỉ", s.off + s.leave, "var(--off)"]);
-  cards.push(["Tổng nhân sự", s.total, "var(--admin)"]);
-  $("#statsRow").innerHTML = cards.map(([label,val,accent])=>`
-    <div class="stat" style="border-left-color:${accent}">
-      <div class="val disp">${val}</div>
-      <div class="lbl">${label}</div>
-    </div>`).join("");
+  const recs=(scheduleData&&selectedDate)?scheduleData.dates[selectedDate]||[]:[];
+  const s={day:0,evening:0,night:0,off:0,leave:0,total:recs.length};
+  recs.forEach(r=>{const c=classifyShift(r.raw);if(c.kind==="shift")s[c.bucket]++;else if(c.kind==="off"||c.kind==="sick")s.off++;else if(c.kind==="leave")s.leave++;});
+  const cards=[["Ca sáng",s.day,"var(--ok)"],["Ca chiều",s.evening,"var(--kred)"],["Nghỉ",s.off+s.leave,"var(--off)"],["Tổng NV",s.total,"var(--navy)"]];
+  if(s.night>0) cards.splice(2,0,["Ca đêm",s.night,"var(--night)"]);
+  $("#statsRow").innerHTML=cards.map(([l,v,a])=>`<div class="stat" style="--accent:${a}"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
 }
 
-function shiftBadgeHtml(c){
-  if(c.kind==="shift"){
-    const meta = BUCKET_META[c.bucket];
-    return `<span class="badge mono" style="background:${meta.soft};color:${meta.color}">${meta.icon} ${escapeHtml(c.label)}${c.overnight?" <span style=\"opacity:.7\">(qua đêm)</span>":""}</span>`;
-  }
-  const palette = {
-    off:["var(--off-soft)","var(--ink-soft)"],
-    leave:["var(--leave-soft)","#8A6A16"],
-    swap:["var(--night-soft)","var(--night)"],
-    note:["var(--paper)","var(--ink-soft)"],
-  }[c.kind];
-  return `<span class="badge" style="background:${palette[0]};color:${palette[1]};max-width:180px;overflow:hidden;text-overflow:ellipsis;" title="${escapeHtml(c.label)}">${escapeHtml(c.label)}</span>`;
-}
-
-function renderTeams(){
-  const recs = dayRecords();
-  const sm = recs.filter(r=>teamOf(r.position, r.name)==="SM");
-  const admin = recs.filter(r=>teamOf(r.position, r.name)==="ADMIN");
-  const sale = recs.filter(r=>teamOf(r.position, r.name)==="SALES");
-
-  const empRowHtml = (r, c, isOff) => {
-    const active = !isOff && isShiftActiveNow(c);
-    const timeHtml = isOff
-      ? `<div class="emp-time off">${escapeHtml(c.label)}</div>`
-      : `<div class="emp-time">${escapeHtml(c.label)}${shortShiftBadge(c)}</div>`;
-    const phone = formatPhone(r.phone);
-    const actionsHtml = phone
-      ? `<div class="emp-actions">
-          <button class="phone-btn no-print" data-phone-toggle="${escapeHtml(phone)}" title="Liên hệ ${escapeHtml(r.name)}">☎</button>
-        </div>`
-      : "";
-    return `<div class="emp-row ${active?"active":""}" data-emp="${r._key}">
-      ${timeHtml}
-      <div class="emp-info">
-        <div class="emp-name">${escapeHtml(r.name)}</div>
-        <div class="emp-pos">${escapeHtml(r.position)}</div>
-        ${active ? `<div class="active-pill"><span class="dot"></span>Đang làm</div>` : ""}
-      </div>
-      ${actionsHtml}
-    </div>`;
-  };
-
-  const buildTeamCard = (title, list) => {
-    if(list.length===0){
-      return `<div class="team-card"><div class="team-head"><div class="name">${title}</div><div class="team-count">0 người</div></div><div class="team-body"><div class="empty">Không có dữ liệu.</div></div></div>`;
-    }
-    const groups = {day:[], evening:[], night:[], off:[]};
-    list.forEach(r=>{
-      const c = classifyShift(r.raw);
-      if(c.kind==="shift") groups[c.bucket].push({r,c});
-      else groups.off.push({r,c});
-    });
-    let body = "";
-    [["day","Ca sáng"],["evening","Ca chiều/tối"],["night","Ca đêm"]].forEach(([key,label])=>{
-      const g = groups[key];
-      if(g.length===0) return;
-      const meta = BUCKET_META[key];
-      body += `<div class="shift-group">
-        <div class="shift-group-head"><span class="shift-dot" style="background:${meta.color}"></span>${label} · ${g.length}</div>
-        ${g.map(({r,c})=>empRowHtml(r,c,false)).join("")}
-      </div>`;
-    });
-    if(groups.off.length>0){
-      body += `<div class="shift-group">
-        <div class="shift-group-head"><span class="shift-dot" style="background:var(--off)"></span>Nghỉ · ${groups.off.length}</div>
-        ${groups.off.map(({r,c})=>empRowHtml(r,c,true)).join("")}
-      </div>`;
-    }
-    return `<div class="team-card">
-      <div class="team-head"><div class="name">${title}</div><div class="team-count">${list.length} người</div></div>
-      <div class="team-body">${body}</div>
-    </div>`;
-  };
-
-  $("#smBox").innerHTML = sm.length ? buildTeamCard("Quản lý cửa hàng (SM)", sm) : "";
-  $("#teamsBox").innerHTML = buildTeamCard("Team Admin", admin) + buildTeamCard("Team Sale", sale);
-}
-
-/* ============================================================ Target Push Sale - Team Admin */
-// Mỗi tháng chỉ cần thêm 1 khối theo mẫu bên dưới. d = [T2-T5, Thứ 6, T7-CN & lễ, Kohnan Day] (số/ca).
-// f = số/ca trực quầy (nhóm Cashier PT chỉ có 1 mức cho mọi ngày). m = target cả tháng.
-const PUSH_TARGETS = {
-  "2026-10": {
-    title: "Push Sale tháng 10/2026",
-    kohnanDays: ["10-05","10-20"],
-    products: [
-      {key:"sua", label:"Sữa tắm ON: The Body", short:"Sữa tắm", unit:"chai", icon:"🧴"},
-      {key:"kem", label:"Kem dưỡng tay", short:"Kem tay", unit:"tuýp", icon:"🤲"},
-      {key:"son", label:"Son dưỡng môi", short:"Son dưỡng", unit:"thỏi", icon:"💋"},
-    ],
-    people: [
-      {name:"Nguyễn Lê Minh Thư", role:"CS - FT",
-        sua:{m:150,d:[4.1,6.2,9.1,9.1]}, kem:{m:23,d:[0.6,1.0,1.4,1.4]}, son:{m:23,d:[0.6,1.0,1.4,1.4]}},
-      {name:"Lê Uyên Nhi", role:"SC - FT",
-        sua:{m:125,d:[3.5,5.2,7.6,7.6]}, kem:{m:18,d:[0.5,0.7,1.1,1.1]}, son:{m:18,d:[0.5,0.7,1.1,1.1]}},
-      {name:"Võ Đặng Tú Quyên", role:"Admin - FT",
-        sua:{m:100,d:[2.8,4.1,6.1,6.1]}, kem:{m:12,d:[0.3,0.5,0.7,0.7]}, son:{m:12,d:[0.3,0.5,0.7,0.7]}},
-      {name:"Tăng Quế Nhi", role:"Admin - FT",
-        sua:{m:85,d:[2.4,3.5,5.2,5.2]}, kem:{m:11,d:[0.3,0.5,0.7,0.7]}, son:{m:11,d:[0.3,0.5,0.7,0.7]}},
-      {name:"Phan Thị Chúc Linh", role:"Admin - FT",
-        sua:{m:85,d:[2.4,3.5,5.2,5.2]}, kem:{m:11,d:[0.3,0.5,0.7,0.7]}, son:{m:11,d:[0.3,0.5,0.7,0.7]}},
-      {name:"Nguyễn Ngọc Phụng", role:"Admin - FT (mới)",
-        sua:{m:80,d:[2.2,3.3,4.9,4.9]}, kem:{m:11,d:[0.3,0.5,0.7,0.7]}, son:{m:11,d:[0.3,0.5,0.7,0.7]}},
-      {name:"Dương Xuân Hoàng Ngân", role:"Admin Chief - FT",
-        sua:{m:50,d:[1.4,2.1,3.0,3.0]}, kem:{m:8,d:[0.2,0.3,0.5,0.5]}, son:{m:8,d:[0.2,0.3,0.5,0.5]}},
-      {name:"Phan Thị Thùy Dương", role:"Cashier - PT",
-        sua:{m:50,f:4.2}, kem:{m:8,f:0.7}, son:{m:8,f:0.7}},
-      {name:"Trình Quách Vy", role:"Cashier - PT",
-        sua:{m:35,f:2.9}, kem:{m:8,f:0.7}, son:{m:8,f:0.7}},
-      {name:"Võ Thanh Thảo", role:"Cashier - PT",
-        sua:{m:20,f:1.7}, kem:{m:5,f:0.4}, son:{m:5,f:0.4}},
-      {name:"Nguyễn Việt Hương Như", role:"Cafe Pet - FT (mới)",
-        sua:{m:20,d:[0.6,0.8,1.2,1.2]}, kem:{m:5,d:[0.1,0.2,0.3,0.3]}, son:{m:5,d:[0.1,0.2,0.3,0.3]}},
-    ],
-  },
-};
-const PUSH_DAY_LABELS = ["Ngày thường (T2-T5)","Thứ 6","Cuối tuần & lễ","Kohnan Day"];
-// Quy đổi "≈ 1 sản phẩm mỗi N ca" cho mức dưới 1/ca, theo bảng target gốc.
-const PUSH_HINT = {0.1:7, 0.2:5, 0.3:3, 0.4:2, 0.5:2, 0.6:2, 0.7:2};
-
-function normName(s){
-  return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/đ/gi,"d").toLowerCase().replace(/\s+/g," ").trim();
-}
-function pushDayType(iso, cfg){
-  const d = new Date(iso+"T00:00:00");
-  const mmdd = `${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
-  if(cfg.kohnanDays.includes(mmdd)) return 3;
-  const dow = d.getDay();
-  if(dow===0 || dow===6 || specialDayTags(iso).some(t=>t.cls==="holiday")) return 2;
-  if(dow===5) return 1;
-  return 0;
-}
-function pushQty(spec, dayType){
-  if(!spec) return null;
-  return typeof spec.f === "number" ? spec.f : spec.d[dayType];
-}
-function fmtQty(v){
-  return Number.isInteger(v) ? String(v) : v.toFixed(1);
-}
-
-function renderPush(){
-  const box = $("#pushBox");
-  if(!scheduleData || !selectedDate){ box.innerHTML = ""; return; }
-  const cfg = PUSH_TARGETS[selectedDate.slice(0,7)];
-  if(!cfg){
-    const d = new Date(selectedDate+"T00:00:00");
-    box.innerHTML = `<div class="push-card"><div class="push-empty">Chưa có bảng target push sale Team Admin cho tháng ${d.getMonth()+1}/${d.getFullYear()}.</div></div>`;
-    return;
-  }
-  const dayType = pushDayType(selectedDate, cfg);
-  const index = {};
-  cfg.people.forEach(p=>{ index[normName(p.name)] = p; });
-
-  const working = (scheduleData.dates[selectedDate]||[])
-    .filter(r=>teamOf(r.position, r.name)==="ADMIN")
-    .map(r=>({r, c:classifyShift(r.raw)}))
-    .filter(x=>x.c.kind==="shift")
-    .sort((a,b)=>a.c.startH-b.c.startH || (a.r.no||0)-(b.r.no||0));
-
-  const totals = cfg.products.map(()=>0);
-  const cell = (spec, i) => {
-    const v = pushQty(spec, dayType);
-    if(v===null) return `<td class="q-cell"><span class="q-none">-</span></td>`;
-    totals[i] += v;
-    const hint = typeof spec.f === "number"
-      ? `<div class="q-hint">mỗi ca trực quầy</div>`
-      : (v<1 && PUSH_HINT[v] ? `<div class="q-hint">≈ 1 mỗi ${PUSH_HINT[v]} ca</div>` : "");
-    return `<td class="q-cell"><div class="q-val">${fmtQty(v)}</div>${hint}</td>`;
-  };
-
-  let rows = "";
-  working.forEach(({r,c})=>{
-    const p = index[normName(r.name)];
-    const active = isShiftActiveNow(c);
-    const cells = cfg.products.map((pr,i)=>cell(p ? p[pr.key] : null, i)).join("");
-    rows += `<tr class="${active?"active":""}">
-      <td class="n-cell"><div class="emp-name">${escapeHtml(r.name)}</div><div class="emp-pos">${escapeHtml(p ? p.role : r.position)}${p?"":" · chưa có target"}</div></td>
-      <td class="t-cell mono">${escapeHtml(c.label)}${active?`<div class="active-pill"><span class="dot"></span>Đang làm</div>`:""}</td>
-      ${cells}
-    </tr>`;
-  });
-
-  const head = cfg.products.map(pr=>`<th>${pr.icon} ${pr.short}<span class="u">(${pr.unit})</span></th>`).join("");
-  const foot = cfg.products.map((pr,i)=>`<td class="q-cell"><div class="q-val">${Math.round(totals[i])}</div><div class="q-hint">${pr.unit}</div></td>`).join("");
-
-  box.innerHTML = `<div class="push-card">
-    <div class="push-head">
-      <div>
-        <div class="push-title">Target Push Sale hôm nay - Team Admin</div>
-        <div class="push-sub">${escapeHtml(cfg.title)} · số sản phẩm mỗi bạn cần push trong ca</div>
-      </div>
-      <span class="push-daytype dt${dayType}">${PUSH_DAY_LABELS[dayType]}</span>
-    </div>
-    ${working.length===0
-      ? `<div class="push-empty">Hôm nay không có ai của Team Admin trong ca.</div>`
-      : `<div class="push-table-wrap"><table class="push-table">
-          <thead><tr><th>Nhân viên</th><th>Ca</th>${head}</tr></thead>
-          <tbody>${rows}</tbody>
-          <tfoot><tr><td colspan="2" class="foot-lbl">Tổng team hôm nay</td>${foot}</tr></tfoot>
-        </table></div>`}
+function empRowHtml(r,c,isOff){
+  const active=!isOff&&isActiveNow(c,selectedDate);
+  const tHtml=isOff?`<div class="emp-time off">${esc(c.label)}</div>`:`<div class="emp-time">${esc(c.label)}${shortBadge(c)}</div>`;
+  const phone=formatPhone(r.phone);
+  const act=phone?`<div class="emp-actions"><button class="phone-btn no-print" data-ph="${esc(phone)}" title="${esc(r.name)}">☎</button></div>`:"";
+  return`<div class="emp-row${active?" active":""}">
+    ${tHtml}
+    <div class="emp-info">
+      <div class="emp-name">${esc(r.name)}</div>
+      <div class="emp-pos">${esc(r.pos)}</div>
+      ${active?`<div class="active-pill"><span class="dot"></span>Đang làm</div>`:""}
+    </div>${act}
   </div>`;
 }
 
-/* ============================================================ Tasks */
-function todaysTasks(){
-  if(!selectedDate) return [];
-  return tasksStore[selectedDate] || [];
+function buildTeamCard(title,list){
+  if(!list.length) return`<div class="team-card"><div class="team-head"><div class="team-name">${title}</div><div class="team-count">0</div></div><div class="team-body"><div class="empty-msg">Không có dữ liệu.</div></div></div>`;
+  const g={day:[],evening:[],night:[],off:[]};
+  let q=searchTerm.trim().toLowerCase();
+  let filtered=list.filter(r=>!q||r.name.toLowerCase().includes(q));
+  filtered.forEach(r=>{const c=classifyShift(r.raw);if(c.kind==="shift")g[c.bucket].push({r,c});else g.off.push({r,c});});
+  let body="";
+  [["day","Ca sáng"],["evening","Ca chiều/tối"],["night","Ca đêm"]].forEach(([k,lbl])=>{
+    if(!g[k].length) return;
+    const meta=BK[k];
+    body+=`<div class="shift-group"><div class="shift-group-head"><span class="shift-dot" style="background:${meta.color}"></span>${lbl} · ${g[k].length}</div>${g[k].map(({r,c})=>empRowHtml(r,c,false)).join("")}</div>`;
+  });
+  if(g.off.length) body+=`<div class="shift-group"><div class="shift-group-head"><span class="shift-dot" style="background:var(--off)"></span>Nghỉ · ${g.off.length}</div>${g.off.map(({r,c})=>empRowHtml(r,c,true)).join("")}</div>`;
+  return`<div class="team-card"><div class="team-head"><div class="team-name">${title}</div><div class="team-count">${filtered.length} người</div></div><div class="team-body">${body||'<div class="empty-msg">Không tìm thấy.</div>'}</div></div>`;
 }
-function onShiftNamesToday(){
-  const recs = dayRecords();
-  return recs.filter(r=>classifyShift(r.raw).kind==="shift").map(r=>r.name);
+
+function renderTeams(){
+  const recs=(scheduleData&&selectedDate)?scheduleData.dates[selectedDate]||[]:[];
+  const sm=recs.filter(r=>teamOf(r.pos,r.name)==="SM");
+  const admin=recs.filter(r=>teamOf(r.pos,r.name)==="ADMIN");
+  const sale=recs.filter(r=>teamOf(r.pos,r.name)==="SALES");
+  $("#smBox").innerHTML=sm.length?buildTeamCard("Quản lý cửa hàng — SM",sm):"";
+  $("#teamsBox").innerHTML=buildTeamCard("Team Admin",admin)+buildTeamCard("Team Sale",sale);
 }
-function renderTaskAssigneeOptions(){
-  const sel = $("#newTaskAssignee");
-  const names = onShiftNamesToday();
-  const current = sel.value;
-  sel.innerHTML = `<option value="">— Chưa phân công —</option>` + names.map(n=>`<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
-  if(names.includes(current)) sel.value = current;
+
+/* ===== PUSH SALE ===== */
+const PUSH_T={
+  "2026-10":{
+    title:"Push Sale T10/2026",kohnanDays:["10-05","10-20"],
+    products:[{key:"sua",label:"Sữa tắm ON",unit:"chai",icon:"🧴"},{key:"kem",label:"Kem dưỡng tay",unit:"tuýp",icon:"🤲"},{key:"son",label:"Son dưỡng môi",unit:"thỏi",icon:"💋"}],
+    people:[
+      {name:"NGUYỄN LÊ MINH THƯ",role:"CS - FT",sua:{m:150,d:[4.1,6.2,9.1,9.1]},kem:{m:23,d:[0.6,1.0,1.4,1.4]},son:{m:23,d:[0.6,1.0,1.4,1.4]}},
+      {name:"LÊ UYÊN NHI",role:"SC - FT",sua:{m:125,d:[3.5,5.2,7.6,7.6]},kem:{m:18,d:[0.5,0.7,1.1,1.1]},son:{m:18,d:[0.5,0.7,1.1,1.1]}},
+      {name:"VÕ ĐẶNG TÚ QUYÊN",role:"Admin - FT",sua:{m:100,d:[2.8,4.1,6.1,6.1]},kem:{m:12,d:[0.3,0.5,0.7,0.7]},son:{m:12,d:[0.3,0.5,0.7,0.7]}},
+      {name:"TĂNG QUẾ NHI",role:"Admin - FT",sua:{m:85,d:[2.4,3.5,5.2,5.2]},kem:{m:11,d:[0.3,0.5,0.7,0.7]},son:{m:11,d:[0.3,0.5,0.7,0.7]}},
+      {name:"PHAN THỊ CHÚC LINH",role:"Admin - FT",sua:{m:85,d:[2.4,3.5,5.2,5.2]},kem:{m:11,d:[0.3,0.5,0.7,0.7]},son:{m:11,d:[0.3,0.5,0.7,0.7]}},
+      {name:"NGUYỄN NGỌC PHỤNG",role:"Admin - FT",sua:{m:80,d:[2.2,3.3,4.9,4.9]},kem:{m:11,d:[0.3,0.5,0.7,0.7]},son:{m:11,d:[0.3,0.5,0.7,0.7]}},
+      {name:"Dương Xuân Hoàng Ngân",role:"Admin Chief - FT",sua:{m:50,d:[1.4,2.1,3.0,3.0]},kem:{m:8,d:[0.2,0.3,0.5,0.5]},son:{m:8,d:[0.2,0.3,0.5,0.5]}},
+      {name:"PHAN THỊ THÙY DƯƠNG",role:"Cashier - PT",sua:{m:50,f:4.2},kem:{m:8,f:0.7},son:{m:8,f:0.7}},
+      {name:"TRÌNH QUÁCH VY",role:"Cashier - PT",sua:{m:35,f:2.9},kem:{m:8,f:0.7},son:{m:8,f:0.7}},
+      {name:"VÕ THANH THẢO",role:"Cashier - PT",sua:{m:20,f:1.7},kem:{m:5,f:0.4},son:{m:5,f:0.4}},
+      {name:"NGUYỄN VIỆT HƯƠNG NHƯ",role:"Cafe Pet - FT",sua:{m:20,d:[0.6,0.8,1.2,1.2]},kem:{m:5,d:[0.1,0.2,0.3,0.3]},son:{m:5,d:[0.1,0.2,0.3,0.3]}},
+    ]
+  }
+};
+const DT_LABELS=["Ngày thường (T2-T5)","Thứ 6","Cuối tuần & lễ","Kohnan Day"];
+function pushDayType(iso,cfg){
+  const d=new Date(iso+"T00:00:00");
+  const mmdd=`${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+  if(cfg.kohnanDays.includes(mmdd)) return 3;
+  const dow=d.getDay();
+  if(dow===0||dow===6||dayTags(iso).some(t=>t.cls==="holiday")) return 2;
+  if(dow===5) return 1;
+  return 0;
+}
+function pushQty(spec,dt){return spec?(typeof spec.f==="number"?spec.f:spec.d[dt]):null;}
+function fmtQ(v){return Number.isInteger(v)?String(v):v.toFixed(1);}
+
+function renderPush(){
+  const box=$("#pushBox");
+  if(!scheduleData||!selectedDate){box.innerHTML="";return;}
+  const cfg=PUSH_T[selectedDate.slice(0,7)];
+  if(!cfg){box.innerHTML=`<div class="push-card"><div style="padding:16px;color:var(--ink2);font-size:13px;">Chưa có bảng push sale cho tháng này.</div></div>`;return;}
+  const dt=pushDayType(selectedDate,cfg);
+  const idx={};cfg.people.forEach(p=>{idx[normName(p.name)]=p;});
+  const working=(scheduleData.dates[selectedDate]||[])
+    .filter(r=>teamOf(r.pos,r.name)==="ADMIN")
+    .map(r=>({r,c:classifyShift(r.raw)}))
+    .filter(x=>x.c.kind==="shift")
+    .sort((a,b)=>a.c.startH-b.c.startH);
+  if(!working.length){box.innerHTML=`<div class="push-card"><div class="push-head"><div><div class="push-title">Target Push Sale - Team Admin</div><div class="push-sub">${esc(cfg.title)}</div></div></div><div style="padding:14px 16px;color:var(--ink2);font-size:13px;">Hôm nay không có ai Team Admin trong ca.</div></div>`;return;}
+  const totals=cfg.products.map(()=>0);
+  const cellHtml=(spec,i)=>{
+    const v=pushQty(spec,dt);
+    if(v===null) return`<td><div class="q-none">—</div></td>`;
+    totals[i]+=v;
+    return`<td><div class="q-val">${fmtQ(v)}</div></td>`;
+  };
+  const dtCls=dt===0?"":dt===1?" dt1":dt===2?" dt2":" dt3";
+  let rows="";
+  working.forEach(({r,c})=>{
+    const p=idx[normName(r.name)];
+    const active=isActiveNow(c,selectedDate);
+    rows+=`<tr class="${active?"active":""}"><td><div class="emp-name">${esc(r.name)}</div><div class="emp-pos">${esc(p?p.role:r.pos)}</div></td><td style="font-size:12px;color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap;">${esc(c.label)}${active?`<div class="active-pill"><span class="dot"></span>Đang làm</div>`:""}</td>${cfg.products.map((_,i)=>cellHtml(p?p[cfg.products[i].key]:null,i)).join("")}</tr>`;
+  });
+  const thead=cfg.products.map(p=>`<th>${p.icon} ${esc(p.label)}<span class="u">${p.unit}</span></th>`).join("");
+  const tfoot=cfg.products.map((p,i)=>`<td><div class="q-val">${Math.round(totals[i])}</div><div class="q-hint">${p.unit}</div></td>`).join("");
+  box.innerHTML=`<div class="push-card"><div class="push-head"><div><div class="push-title">🎯 Target Push Sale hôm nay — Team Admin</div><div class="push-sub">${esc(cfg.title)}</div></div><span class="push-daytype${dtCls}">${DT_LABELS[dt]}</span></div><div class="push-table-wrap"><table class="push-table"><thead><tr><th>Nhân viên</th><th>Ca</th>${thead}</tr></thead><tbody>${rows}</tbody><tfoot><tr><td colspan="2" style="font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase;">Tổng team</td>${tfoot}</tr></tfoot></table></div></div>`;
+}
+
+/* ===== TASKS ===== */
+function onShiftNames(){const recs=scheduleData&&selectedDate?(scheduleData.dates[selectedDate]||[]):[];return recs.filter(r=>classifyShift(r.raw).kind==="shift").map(r=>r.name);}
+function renderAssigneeOpts(){
+  const sel=$("#newTaskAssignee"),cur=sel.value,names=onShiftNames();
+  sel.innerHTML=`<option value="">— Chưa phân công —</option>`+names.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");
+  if(names.includes(cur)) sel.value=cur;
 }
 function renderTasks(){
-  const list = todaysTasks();
-  const el = $("#taskList");
-  if(!selectedDate){
-    el.innerHTML = `<div class="empty">Tải file lịch ca lên (hoặc chọn ngày) để bắt đầu thêm việc cho hôm nay.</div>`;
-    return;
-  }
-  if(list.length===0){
-    el.innerHTML = `<div class="empty">Chưa có việc nào cho ngày này. Thêm việc ở khung phía trên, hoặc tải file công việc lên.</div>`;
-    return;
-  }
-  el.innerHTML = list.map(t=>`
-    <div class="task-row ${t.done?"done":""}">
-      <button class="task-check ${t.done?"checked":""}" data-id="${t.id}" data-action="toggle">${t.done?"✓":""}</button>
-      <div class="task-body">
-        <div class="task-title">${escapeHtml(t.title)}</div>
-        <div class="task-sub">
-          ${t.assignee ? `<span class="assignee-pill">👤 ${escapeHtml(t.assignee)}</span>` : `<span>Chưa phân công</span>`}
-          ${t.source ? `<span>· ${escapeHtml(t.source)}</span>` : ""}
-        </div>
-      </div>
-      <button class="task-del no-print" data-id="${t.id}" data-action="delete" title="Xóa">✕</button>
-    </div>
-  `).join("");
+  const list=selectedDate?tasksStore[selectedDate]||[]:[];
+  const el=$("#taskList");
+  if(!list.length){el.innerHTML=`<div class="empty-msg">Chưa có việc nào. Thêm ở khung phía trên.</div>`;return;}
+  el.innerHTML=list.map(t=>`<div class="task-row${t.done?" done":""}">
+    <button class="task-check${t.done?" checked":""}" data-id="${t.id}" data-action="toggle">${t.done?"✓":""}</button>
+    <div class="task-body"><div class="task-title">${esc(t.title)}</div><div class="task-sub">${t.assignee?`<span class="assignee-pill">👤 ${esc(t.assignee)}</span>`:"<span>Chưa phân công</span>"}${t.source?`<span>· ${esc(t.source)}</span>`:""}</div></div>
+    <button class="task-del no-print" data-id="${t.id}" data-action="delete">✕</button>
+  </div>`).join("");
 }
-
-function addTask(title, assignee, source){
+function addTask(title,assignee,src){
   if(!selectedDate) return;
-  if(!tasksStore[selectedDate]) tasksStore[selectedDate] = [];
-  tasksStore[selectedDate].push({id: "t"+Date.now()+Math.random().toString(36).slice(2,7), title, assignee: assignee||"", done:false, source: source||""});
-  persistTasks();
-  renderTasks();
+  if(!tasksStore[selectedDate]) tasksStore[selectedDate]=[];
+  tasksStore[selectedDate].push({id:"t"+Date.now()+Math.random().toString(36).slice(2),title,assignee:assignee||"",done:false,source:src||""});
+  persistTasks(); renderTasks();
 }
-
-/* ============================================================ Lenient task-file parser */
-function parseTaskWorkbook(workbook, opts){
-  const auto = !!(opts && opts.auto);
-  let added = 0, targetIso = selectedDate;
-  workbook.SheetNames.forEach(sheetName=>{
-    const ws = workbook.Sheets[sheetName];
-    const aoa = XLSX.utils.sheet_to_json(ws, {header:1, raw:true, defval:null});
-    if(!aoa || aoa.length < 2) return;
-    // find header row: first row with >=2 non-empty string cells
-    let headerIdx = -1;
-    for(let r=0;r<Math.min(aoa.length,10);r++){
-      const row = aoa[r]; if(!row) continue;
-      const strCells = row.filter(c=>typeof c==="string" && c.trim()).length;
-      if(strCells>=2){ headerIdx=r; break; }
-    }
-    if(headerIdx===-1) return;
-    const header = aoa[headerIdx].map(h=>String(h||"").toLowerCase());
-    const findCol = (keywords) => header.findIndex(h=>keywords.some(k=>h.includes(k)));
-    const dateCol = findCol(["ngày","date"]);
-    const titleCol = findCol(["công việc","nội dung","title","task","tên việc"]);
-    const assigneeCol = findCol(["phụ trách","người","assignee","nhân viên"]);
-    if(titleCol===-1) return; // can't use this sheet
-    for(let r=headerIdx+1;r<aoa.length;r++){
-      const row = aoa[r]; if(!row) continue;
-      const title = row[titleCol];
-      if(typeof title !== "string" || !title.trim()) continue;
-      let iso = targetIso;
-      if(dateCol!==-1 && looksLikeDateSerial(row[dateCol])) iso = excelSerialToIso(row[dateCol]);
-      const assignee = assigneeCol!==-1 ? (row[assigneeCol]||"") : "";
-      if(!tasksStore[iso]) tasksStore[iso] = [];
-      tasksStore[iso].push({id:"t"+Date.now()+Math.random().toString(36).slice(2,7), title:title.trim(), assignee:String(assignee||"").trim(), done:false, source: sheetName, _auto: auto});
+function parseTaskWb(wb){
+  let added=0;
+  wb.SheetNames.forEach(sn=>{
+    const ws=wb.Sheets[sn];
+    const aoa=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null});
+    if(!aoa||aoa.length<2) return;
+    let hi=-1;
+    for(let r=0;r<Math.min(aoa.length,10);r++){if((aoa[r]||[]).filter(c=>typeof c==="string"&&c.trim()).length>=2){hi=r;break;}}
+    if(hi===-1) return;
+    const h=aoa[hi].map(c=>String(c||"").toLowerCase());
+    const findC=kw=>h.findIndex(x=>kw.some(k=>x.includes(k)));
+    const tC=findC(["công việc","nội dung","title","task"]);
+    const aC=findC(["phụ trách","người","assignee","nhân viên"]);
+    const dC=findC(["ngày","date"]);
+    if(tC===-1) return;
+    for(let r=hi+1;r<aoa.length;r++){
+      const row=aoa[r];if(!row) continue;
+      const title=row[tC];if(typeof title!=="string"||!title.trim()) continue;
+      let iso=selectedDate;
+      if(dC!==-1&&looksLikeDateSerial(row[dC])) iso=excelSerialToIso(row[dC]);
+      const assignee=aC!==-1?String(row[aC]||"").trim():"";
+      if(!tasksStore[iso]) tasksStore[iso]=[];
+      tasksStore[iso].push({id:"t"+Date.now()+Math.random().toString(36).slice(2),title:title.trim(),assignee,done:false,source:sn});
       added++;
     }
   });
   return added;
 }
 
-// Re-syncs tasks from a "CÔNG VIỆC"-style sheet bundled in the main schedule workbook.
-// Previously auto-imported tasks are cleared first so re-uploading the same file doesn't
-// duplicate entries; tasks the user added by hand are always left untouched.
-function autoImportBundledTasks(workbook){
-  Object.keys(tasksStore).forEach(iso=>{
-    tasksStore[iso] = (tasksStore[iso]||[]).filter(t=>!t._auto);
-  });
-  const added = parseTaskWorkbook(workbook, {auto:true});
-  persistTasks();
-  return added;
+/* ===== BANNER ===== */
+function showBanner(el,type,html){
+  el.innerHTML=`<div class="banner ${type}"><div style="flex:1">${html}</div><button onclick="this.closest('.banner').remove()">✕</button></div>`;
 }
 
-/* ============================================================ Event wiring */
-function showBanner(target, type, html){
-  target.innerHTML = `<div class="banner ${type}"><div style="flex:1">${html}</div><button data-close="1">✕</button></div>`;
-  target.querySelector("[data-close]").onclick = () => target.innerHTML = "";
+/* ===== RENDER ALL ===== */
+function renderAll(){
+  renderMeta();
+  if(!scheduleData){
+    $("#dropzone").style.display="";
+    return;
+  }
+  $("#dropzone").style.display="none";
+  $("#gsheetTip").style.display="none";
+  renderControls();
+  renderNote();
+  renderStats();
+  renderPush();
+  renderTeams();
+  renderAssigneeOpts();
+  renderTasks();
 }
 
+/* ===== WIRE EVENTS ===== */
 function wireEvents(){
-  const scheduleFile = $("#scheduleFile");
-  const taskFile = $("#taskFile");
-
-  $("#btnPickSchedule").onclick = () => scheduleFile.click();
-  $("#btnResetData").onclick = () => {
-    const ls = safeLS();
-    if(ls){ ls.removeItem("kb-schedule-data"); ls.removeItem("kb-tasks-data"); }
-    scheduleData = null; fileMeta = null; tasksStore = {}; selectedDate = todayIso(); searchTerm = "";
-    renderAll();
-    showBanner($("#taskBanner"), "info", "Đã xóa toàn bộ dữ liệu đã lưu. Vui lòng tải lại file lịch làm việc.");
+  const sf=$("#scheduleFile"), tf=$("#taskFile");
+  $("#btnPickFile").onclick=()=>sf.click();
+  $("#btnReset").onclick=()=>{
+    const ls=safeLS();if(ls){ls.removeItem("khn16-sched");ls.removeItem("khn16-tasks");}
+    scheduleData=buildBuiltinData(); fileMeta={name:"Dữ liệu nhúng T10/2026",updatedAt:new Date().toISOString()};
+    tasksStore={}; pickDefault(); renderAll();
+    showBanner($("#taskBanner"),"info","Đã xóa dữ liệu lưu. Đang hiển thị dữ liệu nhúng T10/2026.");
   };
-  $("#scheduleUploadZone").onclick = () => scheduleFile.click();
-  $("#scheduleUploadZone").addEventListener("dragover", e=>{ e.preventDefault(); $("#scheduleUploadZone").classList.add("drag"); });
-  $("#scheduleUploadZone").addEventListener("dragleave", ()=> $("#scheduleUploadZone").classList.remove("drag"));
-  $("#scheduleUploadZone").addEventListener("drop", e=>{
-    e.preventDefault(); $("#scheduleUploadZone").classList.remove("drag");
-    if(e.dataTransfer.files.length) handleScheduleFile(e.dataTransfer.files[0]);
+  $("#dropzone").onclick=()=>sf.click();
+  ["dragover","dragenter"].forEach(ev=>$("#dropzone").addEventListener(ev,e=>{e.preventDefault();$("#dropzone").classList.add("drag");}));
+  ["dragleave","drop"].forEach(ev=>$("#dropzone").addEventListener(ev,e=>{if(ev==="drop"){e.preventDefault();if(e.dataTransfer.files.length)handleScheduleFile(e.dataTransfer.files[0]);}$("#dropzone").classList.remove("drag");}));
+  sf.addEventListener("change",e=>{if(e.target.files.length)handleScheduleFile(e.target.files[0]);});
+  $("#btnPickTasks").onclick=()=>tf.click();
+  tf.addEventListener("change",e=>{if(e.target.files.length)handleTaskFile(e.target.files[0]);});
+  $("#prevDay").onclick=()=>shiftDay(-1);
+  $("#nextDay").onclick=()=>shiftDay(1);
+  $("#btnToday").onclick=()=>{const t=todayIso();if(availDates().includes(t)){selectedDate=t;renderAll();}else showBanner($("#taskBanner"),"warn",`Hôm nay (${t}) không có trong dữ liệu lịch.`);};
+  $("#datePicker").addEventListener("change",e=>{if(e.target.value){selectedDate=e.target.value;renderAll();}});
+  $("#searchBox").addEventListener("input",e=>{searchTerm=e.target.value;renderStats();renderTeams();});
+  $("#btnAddTask").onclick=()=>{const t=$("#newTaskTitle");const v=t.value.trim();if(v){addTask(v,$("#newTaskAssignee").value,"Thủ công");t.value="";}};
+  $("#newTaskTitle").addEventListener("keydown",e=>{if(e.key==="Enter")$("#btnAddTask").click();});
+  $("#taskList").addEventListener("click",e=>{
+    const btn=e.target.closest("[data-action]");if(!btn) return;
+    const id=btn.dataset.id,list=tasksStore[selectedDate]||[];
+    if(btn.dataset.action==="toggle"){const t=list.find(x=>x.id===id);if(t)t.done=!t.done;}
+    else if(btn.dataset.action==="delete") tasksStore[selectedDate]=list.filter(x=>x.id!==id);
+    persistTasks(); renderTasks();
   });
-  scheduleFile.addEventListener("change", e=>{ if(e.target.files.length) handleScheduleFile(e.target.files[0]); });
-
-  $("#btnPickTasks").onclick = () => taskFile.click();
-  taskFile.addEventListener("change", e=>{ if(e.target.files.length) handleTaskFile(e.target.files[0]); });
-
-  $("#prevDay").onclick = () => shiftDay(-1);
-  $("#nextDay").onclick = () => shiftDay(1);
-  $("#btnToday").onclick = () => {
-    const t = todayIso();
-    const all = availableDates();
-    if(all.includes(t)){ selectedDate = t; renderAll(); }
-    else showBanner($("#taskBanner"), "warn", `Hôm nay (${t}) không có trong file lịch đã tải — có thể file chưa cập nhật đến ngày này.`);
-  };
-  $("#datePicker").addEventListener("change", e=>{ if(e.target.value){ selectedDate = e.target.value; renderAll(); } });
-  $("#searchBox").addEventListener("input", e=>{ searchTerm = e.target.value; renderStats(); renderTeams(); });
-
-  $("#btnAddTask").onclick = () => {
-    const titleEl = $("#newTaskTitle");
-    const title = titleEl.value.trim();
-    if(!title) return;
-    addTask(title, $("#newTaskAssignee").value, "Thêm thủ công");
-    titleEl.value = "";
-  };
-  $("#newTaskTitle").addEventListener("keydown", e=>{ if(e.key==="Enter") $("#btnAddTask").click(); });
-
-  $("#taskList").addEventListener("click", e=>{
-    const btn = e.target.closest("[data-action]");
-    if(!btn) return;
-    const id = btn.dataset.id;
-    const list = tasksStore[selectedDate] || [];
-    if(btn.dataset.action==="toggle"){
-      const t = list.find(x=>x.id===id); if(t) t.done = !t.done;
-    } else if(btn.dataset.action==="delete"){
-      tasksStore[selectedDate] = list.filter(x=>x.id!==id);
-    }
-    persistTasks();
-    renderTasks();
-  });
-
-  $("#teamsBox").addEventListener("click", e=>{
-    const toggleBtn = e.target.closest("[data-phone-toggle]");
-    document.querySelectorAll(".phone-pop").forEach(p=>p.remove());
-    if(toggleBtn){
-      const phone = toggleBtn.dataset.phoneToggle;
-      const wrap = toggleBtn.closest(".emp-actions");
-      wrap.insertAdjacentHTML("beforeend", phoneActionsHtml(phone));
-      e.stopPropagation();
-    }
-  });
-  document.addEventListener("click", e=>{
-    if(!e.target.closest("[data-phone-toggle]") && !e.target.closest(".phone-pop")){
+  ["#smBox","#teamsBox"].forEach(sel=>{
+    document.querySelector(sel).addEventListener("click",e=>{
+      const btn=e.target.closest("[data-ph]");
       document.querySelectorAll(".phone-pop").forEach(p=>p.remove());
-    }
+      if(btn){const ph=btn.dataset.ph;const wrap=btn.closest(".emp-actions");wrap.insertAdjacentHTML("beforeend",`<div class="phone-pop"><a href="tel:+84${ph.slice(1)}">📞 Gọi — ${esc(ph)}</a><a href="https://zalo.me/${ph}" target="_blank">💬 Zalo</a></div>`);e.stopPropagation();}
+    });
   });
+  document.addEventListener("click",e=>{if(!e.target.closest("[data-ph]")&&!e.target.closest(".phone-pop"))document.querySelectorAll(".phone-pop").forEach(p=>p.remove());});
 }
 
-function shiftDay(delta){
-  const all = availableDates();
-  const idx = all.indexOf(selectedDate);
-  const next = idx + delta;
-  if(next>=0 && next<all.length){ selectedDate = all[next]; renderAll(); }
-}
+function shiftDay(d){const all=availDates();const i=all.indexOf(selectedDate);const n=i+d;if(n>=0&&n<all.length){selectedDate=all[n];renderAll();}}
 
 function handleScheduleFile(file){
-  const reader = new FileReader();
-  reader.onload = (e) => {
+  const r=new FileReader();
+  r.onload=e=>{
     try{
-      const wb = XLSX.read(e.target.result, {type:"array"});
-      const result = parseWorkbook(wb);
-      if(Object.keys(result.dates).length===0){
-        showBanner($("#taskBanner"), "warn", "Không tìm thấy dữ liệu lịch làm việc hợp lệ trong file này. Vui lòng kiểm tra lại định dạng file.");
-        return;
-      }
-      scheduleData = result;
-      fileMeta = {name:file.name, updatedAt:new Date().toISOString()};
-      persistSchedule();
-      pickDefaultDate();
-      const tasksAdded = autoImportBundledTasks(wb);
-      renderAll();
-      const extras = [];
-      if(Object.keys(result.budget||{}).length>0) extras.push("target doanh số");
-      if(Object.keys(result.notes||{}).length>0) extras.push("ghi chú ngày");
-      if(tasksAdded>0) extras.push(`${tasksAdded} công việc từ sheet CÔNG VIỆC`);
-      if(extras.length>0){
-        showBanner($("#taskBanner"), "info", `Đã đọc thêm: ${extras.join(", ")}.`);
-      }
-      if(dateMismatchNotice){
-        showBanner($("#taskBanner"), "warn", dateMismatchNotice);
-      }
-    }catch(err){
-      showBanner($("#taskBanner"), "warn", "Lỗi khi đọc file: " + escapeHtml(err.message||"định dạng không hợp lệ."));
-    }
+      const wb=XLSX.read(e.target.result,{type:"array"});
+      const result=parseWorkbook(wb);
+      if(!Object.keys(result.dates).length){showBanner($("#taskBanner"),"warn","Không tìm thấy dữ liệu lịch hợp lệ trong file.");return;}
+      scheduleData=result; fileMeta={name:file.name,updatedAt:new Date().toISOString()};
+      persistSchedule(); pickDefault(); renderAll();
+      showBanner($("#taskBanner"),"ok",`Đã tải lịch từ <b>${esc(file.name)}</b> — ${Object.keys(result.dates).length} ngày.`);
+    }catch(err){showBanner($("#taskBanner"),"warn","Lỗi đọc file: "+esc(err.message));}
   };
-  reader.readAsArrayBuffer(file);
+  r.readAsArrayBuffer(file);
 }
-
 function handleTaskFile(file){
-  const reader = new FileReader();
-  reader.onload = (e) => {
+  const r=new FileReader();
+  r.onload=e=>{
     try{
-      const wb = XLSX.read(e.target.result, {type:"array"});
-      const added = parseTaskWorkbook(wb);
-      persistTasks();
-      renderTasks();
-      if(added===0){
-        showBanner($("#taskBanner"), "warn", "Không đọc được việc nào từ file — hãy đảm bảo file có cột tên việc (ví dụ 'Công việc' / 'Nội dung'), có thể thêm cột 'Ngày' và 'Người phụ trách'.");
-      }else{
-        showBanner($("#taskBanner"), "info", `Đã thêm ${added} việc từ file "${escapeHtml(file.name)}".`);
-      }
-    }catch(err){
-      showBanner($("#taskBanner"), "warn", "Lỗi khi đọc file công việc: " + escapeHtml(err.message||""));
-    }
+      const wb=XLSX.read(e.target.result,{type:"array"});
+      const added=parseTaskWb(wb); persistTasks(); renderTasks();
+      if(!added) showBanner($("#taskSubBanner"),"warn","Không đọc được việc nào — file cần cột 'Công việc/Nội dung'.");
+      else showBanner($("#taskSubBanner"),"ok",`Đã thêm ${added} việc từ file <b>${esc(file.name)}</b>.`);
+    }catch(err){showBanner($("#taskSubBanner"),"warn","Lỗi đọc file công việc: "+esc(err.message));}
   };
-  reader.readAsArrayBuffer(file);
+  r.readAsArrayBuffer(file);
 }
 
-/* ============================================================ Boot */
+/* ===== BOOT ===== */
 loadPersisted();
-if(scheduleData) pickDefaultDate();
-else selectedDate = todayIso();
+if(!scheduleData){
+  scheduleData=buildBuiltinData();
+  fileMeta={name:"Dữ liệu nhúng T10/2026",updatedAt:new Date().toISOString()};
+}
+pickDefault();
 wireEvents();
 renderAll();
-if(staleDataCleared){
-  showBanner($("#taskBanner"), "info", "Dashboard vừa được cập nhật để sửa lỗi lệch ngày — dữ liệu lịch cũ đã lưu trong trình duyệt đã được xóa tự động. Vui lòng tải lại file lịch làm việc để tiếp tục.");
-} else if(dateMismatchNotice){
-  showBanner($("#taskBanner"), "warn", dateMismatchNotice);
-}
-// Keep the "Đang làm" (currently active) badges live without needing a manual refresh.
-setInterval(()=>{
-  if(scheduleData && selectedDate===todayIso()){ renderStats(); renderPush(); renderTeams(); }
-}, 30000);
+setInterval(()=>{if(scheduleData&&selectedDate===todayIso()){renderStats();renderPush();renderTeams();}},30000);
 </script>
 </body>
 </html>
